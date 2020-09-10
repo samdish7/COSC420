@@ -13,19 +13,20 @@ int main(int argc, char** argv){
 		MPI_Finalize();
 		return 1;
 	}
-	int num = atoi(argv[1]);
-	int worldSize, myRank,i,split;
-
+	long unsigned int num = atoi(argv[1]);
+	int worldSize, myRank,i;
 	MPI_Comm_size(world, &worldSize);
 	MPI_Comm_rank(world, &myRank);
-	
-	split = num / worldSize;
+	i = 2 + myRank;
 
-	if (myRank == 0){
-		printf("The number passed is ~> %d\n",num);
+	while(i <= sqrt(num)){
+		// printf("I am node %d, so my i ~> %d\n",myRank,i);
+		if(num % i == 0){
+			printf("I am node %d and I found a factor! ~> %d\n",myRank,i);
+			MPI_Abort(world,1);
+		}
+		i += worldSize;
 	}
-	i = myRank + 2;
-
 	MPI_Finalize();
 	return 0;
 }
