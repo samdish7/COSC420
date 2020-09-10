@@ -27,6 +27,7 @@ int main(int argc, char** argv){
 		}
 		i += worldSize;
 	}
+	printf("I think %d is prime!\n",num);
 	MPI_Finalize();
 	return 0;
 }
