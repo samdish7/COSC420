@@ -1,0 +1,25 @@
+Time:
+  N: 2305843009213693951
+    1: .029s
+    4: .034s
+    8: .033s
+  N: 46591
+    1: .029s
+    4: .030s
+    8: .034s
+  N: 200
+    1: .029s
+    4: .029s
+    8: .035s
+  Avg:
+    1: .029
+    4: .031
+    8: .034
+
+a. Best: O(1) Worst: O(N^1/2)
+
+b. According to the data, the time is not divided perfectly by adding more nodes. Adding more nodes actually strangely adds more time as well. While in theory using more nodes would result in a faster time, that is not seen in practice
+
+c. You only need to test up to N^1/2 because once the multiplicand moves beyond that number, the multiplier will continue to shrink through numbers that were already tested in the multiplicand
+
+d. The code could be improved by fixing the bad termination of application process
