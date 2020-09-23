@@ -23,7 +23,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 ### N ~> 1
 
 **Vector Size** ~> 10
+
 **Time:**
+	
 	1. .027s
 	2. .029s
 	3. .027s
@@ -32,7 +34,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 **Average:** .0274s
 
 **Vector Size** ~> 100
+
 **Time:**
+
 	1. .030s
 	2. .031s
 	3. .026s
@@ -41,7 +45,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 **Average:** ~> .0304s
 
 **Vector Size** ~> 1000
+
 **Time:**
+
 	1. .027s
 	2. .026s
 	3. .026s
@@ -50,7 +56,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 **Average:** ~> .026s
 
 **Vector Size** ~> 100000
+
 **Time:**
+
 	1. .035s
 	2. .033s
 	3. .031s
@@ -62,7 +70,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 ### N ~> 2
 
 **Vector Size** ~> 10
+
 **Time:**
+
 	1. .027s
 	2. .028s
 	3. .028s
@@ -71,7 +81,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 **Average:** ~> .0275s
 
 **Vector Size** ~> 100
+
 **Time:**
+
 	1. .027s
 	2. .027s
 	3. .025s
@@ -80,7 +92,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 **Average:** ~> .0264s
 
 **Vector Size** ~> 1000
+
 **Time:**
+
 	1. .030s
 	2. .026s
 	3. .024s
@@ -89,7 +103,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 **Average:** ~> .0268s
 
 **Vector Size** ~> 100000
+
 **Time:**
+
 	1. .031s
 	2. .034s
 	3. .032s
@@ -100,7 +116,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 ### N ~> 4
 
 **Vector Size** ~> 10
+
 **Time:**
+
 	1. .031s
 	2. .029s
 	3. .026s
@@ -109,7 +127,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 **Average:** ~> .0286s
 
 **Vector Size** ~> 100
+
 **Time:**
+
 	1. .033s
 	2. .028s
 	3. .032s
@@ -118,7 +138,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 **Average:** ~> .0302s
 
 **Vector Size** ~> 1000
+
 **Time:**
+
 	1. .030s
 	2. .029s
 	3. .025s
@@ -127,7 +149,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 **Average:** ~> .0274s
 
 **Vector Size** ~> 100000
+
 **Time:**
+
 	1. .032s
 	2. .034s
 	3. .034s
@@ -138,7 +162,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 ### N ~> 8
 
 **Vector Size** ~> 10
+
 **Time:**
+
 	1. .035s
 	2. .031s
 	3. .032s
@@ -147,7 +173,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 **Average:** ~> .0324s
 
 **Vector Size** ~> 10
+
 **Time:**
+
 	1. .033s
 	2. .033s
 	3. .033s
@@ -156,7 +184,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 **Average:** ~> .0332s
 
 **Vector Size** ~> 1000
+
 **Time:**
+
 	1. .031s
 	2. .033s
 	3. .032s
@@ -165,7 +195,9 @@ Time, number of processors, and vector size is recorded below on numberous tests
 **Average:** ~> .0314s
 
 **Vector Size** ~> 100000
+
 **Time:**
+
 	1. .038s
 	2. .037s
 	3. .036s
@@ -207,13 +239,16 @@ To execute code, enter the following command:
 
 Time, number of processors, and size of matrices is recorded below with various sizes. 
 
-Note: I'm only using matrices that are the same dimensions as the other.
-Note2: I only did the cases where you couldn't multiply the matrices on the N = 1 phase because it is redundant to do them with the others and I wanted to save time.
+*Note:* I'm only using matrices that are the same dimensions as the other.
+
+*Note2:* I only did the cases where you couldn't multiply the matrices on the N = 1 phase because it is redundant to do them with the others and I wanted to save time.
 
 ### N ~> 1
 
 **Matrix Sizes** ~> 100x100
+
 **Time:**
+
 	1. 0.118s
 	2. 0.124s
 	3. 0.115s
@@ -222,7 +257,9 @@ Note2: I only did the cases where you couldn't multiply the matrices on the N = 
 **Average:** 0.1190s
 
 **Matrix Sizes** ~> 100x1000
+
 **Time:**
+
 	1. 0.040s
 	2. 0.041s
 	3. 0.041s
@@ -231,7 +268,9 @@ Note2: I only did the cases where you couldn't multiply the matrices on the N = 
 **Average:** 0.0402s
 
 **Matrix Sizes** ~> 500x500
+
 **Time:**
+
 	1. 6.818s
 	2. 6.913s
 	3. 6.789s
@@ -240,7 +279,9 @@ Note2: I only did the cases where you couldn't multiply the matrices on the N = 
 **Average:** 6.7610s
 
 **Matrix Sizes** ~> 500x1000
+
 **Time:**
+
 	1. 0.083s
 	2. 0.071s
 	3. 0.086s
@@ -249,7 +290,9 @@ Note2: I only did the cases where you couldn't multiply the matrices on the N = 
 **Average:** 0.0804s
 
 **Matrix Sizes** ~> 1000x1000
+
 **Time:**
+
 	1. N/A
 	2. N/A
 	3. N/A
@@ -260,7 +303,9 @@ Note2: I only did the cases where you couldn't multiply the matrices on the N = 
 ### N ~> 4
 
 **Matrix Sizes** ~> 100x100
+
 **Time:**
+
 	1. 0.296s
 	2. 0.304s
 	3. 0.305s
@@ -269,7 +314,9 @@ Note2: I only did the cases where you couldn't multiply the matrices on the N = 
 **Average:** 0.299s
 
 **Matrix Sizes** ~> 500x500
+
 **Time:**
+
 	1. 10.239s
 	2. 10.300s
 	3. 10.375s
@@ -278,7 +325,9 @@ Note2: I only did the cases where you couldn't multiply the matrices on the N = 
 **Average:** 10.3324s
 
 **Matrix Sizes** ~> 1000x1000
+
 **Time:**
+
 	1. 1m, 8.413s
 	2. 1m, 2.893s
 	3. 1m, 2.712s
@@ -289,7 +338,9 @@ Note2: I only did the cases where you couldn't multiply the matrices on the N = 
 ### N ~> 8
 
 **Matrix Sizes** ~> 100x100
+
 **Time:**
+
 	1. 0.376s
 	2. 0.365s
 	3. 0.352s
@@ -298,7 +349,9 @@ Note2: I only did the cases where you couldn't multiply the matrices on the N = 
 **Average:** 0.3598s
 
 **Matrix Sizes** ~> 500x500
+
 **Time:**
+
 	1. 12.137s
 	2. 12.269s
 	3. 12.218s
@@ -307,7 +360,9 @@ Note2: I only did the cases where you couldn't multiply the matrices on the N = 
 **Average:** 12.2046s
 
 **Matrix Sizes** ~> 1000x1000
+
 **Time:**
+
 	1. 1m, 10.380s
 	2. 1m, 10.084s
 	3. 1m, 9.752s
