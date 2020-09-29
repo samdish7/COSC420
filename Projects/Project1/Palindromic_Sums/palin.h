@@ -21,9 +21,27 @@ int isPalin(int num){
 	}
 }
 
-int conSquares(int num){
-	int range = sqrt(num);
-	//printf("Upper bound for %d ~> %d\n", num, range);
+int conSquares(long unsigned int palin){
+	int range = sqrt(palin); //Upper bound
+	int lower = 1;	// Lower bound
+	int i;
+	unsigned long long int sumSquares;
+	for(;lower < range; lower++){	// Keeps track of lower bound
+		//while(sumSquares < palin){	// Keeps track of if palin is a sum of consecutive squares
+		sumSquares = 0;
+			for (i = lower; i <= range; i++){	// Adds the consecutive squares starting at lower bound and going until upper
+				sumSquares += pow(i,2);
+				if(sumSquares == palin){
+					return palin;
+				}
+				if(sumSquares > palin){
+					break;
+				}
+			}
+		//}
+	}
 	
+	//printf("Upper bound for %d ~> %d\n", num, range);
+	return 0;	
 }
 #endif

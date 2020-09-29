@@ -10,19 +10,24 @@ int main(int argc, char** argv){
         MPI_Init(&argc, &argv);
         MPI_Comm world = MPI_COMM_WORLD;
 
-        int myRank, worldSize, i, sum=0;
+        int myRank, worldSize;
+	unsigned long long int i, sum = 0;
 
         MPI_Comm_size(world,&worldSize);
         MPI_Comm_rank(world,&myRank);
 	
-	for(i = 2; i < 1000; i++){
+	/* Serial Implementaion
+ 	* for(i = 2; i < 100000000; i++){
 		if(isPalin(i)){
-			conSquares(i);
-			//printf("%d\n",i);
+			if(conSquares(i)){
+				//printf("%d\n",i);
+				sum += i;
+			}
 		}
 	}
-
-MPI_Finalize();
-return 0;
+	printf("The sums of all the palindomic numbers below 10^8 is ~> %llu\n",sum);
+	*/
+	MPI_Finalize();
+	return 0;
 }
 
