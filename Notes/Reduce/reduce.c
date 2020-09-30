@@ -29,13 +29,13 @@ int main(int argc, char** argv){
 
 	int* numbers = (int*) malloc(N*sizeof(int));
 	int i;
-
+	int sum = 0;
 	char buf[256];
 	char tmp[3];
 	
 	for(i = 0; i < N; i++){
 		numbers[i] = rand() % 10;
-		sprintf(tmp, "%d ", numbers[i]);
+		sprintf(tmp, "%d ", numbers[i]); // This prints the number and prints it to tmp so it can be added on to buf
 		strcat(buf, tmp);
 	}
 	
@@ -54,13 +54,15 @@ int main(int argc, char** argv){
 		result = (int*) malloc(N*sizeof(int));
 	}
 	
-	MPI_Reduce(number, result, N, MPI_INT, MPI_SUM, 0, world);
+	MPI_Reduce(numbers, result, N, MPI_INT, MPI_SUM, 0, world);
 	
 	if(myRank == 0){
 		for(i=0; i<N; i++){
+			sum += result[i];
 			printf("%d ", result[i]);
 		}
 		puts("");
+		printf("Sum ~> %d\n",sum);
 	}
 	
 	free(numbers);
