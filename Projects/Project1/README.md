@@ -18,6 +18,32 @@ Find the sum of all the numbers less than 10^8 that are both palindromic and can
 
 ### Approach
 
-Our approach to the problem was to first, solve it using a serial algorithm, then work to parallelize it.  We found this method the most useful because once we figured out the algorithms to solve the problem, we could then change the code around a bit so it can be parallelized.  This gives us a good example of how much faster the problem can be solved compared to the serial version.
+Our approach to the problem was to first, solve it using a serial algorithm, then work to parallelize it.  We found this method the most useful because once we figured out the algorithms to solve the problem, we could then change the code around a bit so it can be parallelized.  This also allows us to compare the times between the serial and parallel versions.
 
-We found that this program can 
+In order to help with memory allocation, we first found out how many palindromes fit the conditions given above, and then we allocated that much memory in our arrays so we could then use **MPI Reduce** more effectively, rather than using another reduce to find the total number of palindromes. In other words, we were a tad lazy :).
+
+## Data and results
+
+Below is the data collected on the program.  Both the serial and parallel versions were tested. N refers to number of processors.
+
+### Serial
+
+**Number of Calculations:** 100020161
+**Average Time (10 Tests):** 16.090s
+
+### Parallel
+
+**N ~> 2**
+**Number of Calculations:** 100020329
+**Average Time (10 Tests):** 9.067s
+
+**N ~> 4**
+**Number of Calculations:** 100020331
+**Average Time (10 Tests):** 4.609s
+
+**N ~> 8**
+**Number of Calculations:** 100020335
+**Average Time (10 Tests):** 2.385s
+
+
+## Problem 2; Chip Defects
