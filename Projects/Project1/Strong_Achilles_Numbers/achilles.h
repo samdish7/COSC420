@@ -20,4 +20,35 @@ int powerful(int p/*Factor*/, int n/*Number*/){
 	return 0;
 }
 
+int perfectPower(int n) {
+	int i;
+	for(i = 2; i <= sqrt(n); i++) {
+		int m = log(n) / log(2); //roundabout way of finding log2(n)
+		int j;
+		for(j = 2; j <= m; j++) {
+			if(pow(i,j) == n) {
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+int gcd(int i, int n) {
+	if(i == 0) {
+		return n;
+	}
+	return gcd(n % i, i);
+}
+
+int totient(int n) {
+	int i, a = 1;
+	for(i = 2; i < n; i++) {
+		if(gcd(i, n) == 1) {
+			a++;
+		}
+	}
+	return a;
+}
+
 #endif
