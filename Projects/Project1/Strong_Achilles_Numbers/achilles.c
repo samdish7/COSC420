@@ -5,7 +5,7 @@
 #include<mpi.h>
 #include<math.h>
 #include"achilles.h"
-#define UPPER 1000
+#define UPPER 100000000
 int main(int argc, char** argv){
         MPI_Init(&argc, &argv);
         MPI_Comm world = MPI_COMM_WORLD;
@@ -41,11 +41,37 @@ int main(int argc, char** argv){
 				}
 			}
 		}
-		//if(x){total++; printf("%d ",n);} //Test to see if powerful worked... it does :)
+		if(x) {
+			if (!perfectPower(n)) {
+				t = totient(n);
+				x2 = 1;
+				if(isPrime(t)) {
+					x2 = 0;
+					continue;
+				}
+				for(q = 2; q < t; q++) {
+					if(x2) {
+						if(t % q == 0) {
+							if(isPrime(q)) {
+								if(!powerful(q,t)) {
+									x2 = 0;
+									break;
+								}
+							}
+						}
+					}
+				}
+				if(x2) {
+					if(!perfectPower(t)) {
+						printf("%d ", t);
+						total++;
+					}
+				}
+			}
+		}
 	}
 
-
-	printf("Total powerful nums ~> %d\n",total);
+	printf("Total strong achilles nums ~> %d\n",total);
 MPI_Finalize();
 return 0;
 }
