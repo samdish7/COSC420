@@ -127,11 +127,21 @@ int main(int argc, char** argv){
 		}
 	
 	initMat(&result, matrixA.cols, matrixA.rows, 0);
+	int x = innerProd(matrixA.arr, matrixB.arr, atoi(argv[2]), world, worldSize, myRank);
+	
+	//Output of inner product
+	if(myRank == 0){
+		puts("\nResult of A^(T) Done");
+		printf("Inner Prod ~> %d\n", x);
+		free(result.arr);
+	}
+	
+	initMat(&result, matrixA.cols, matrixA.rows, 0);
 	transpose(&matrixA, &result);
 	
 	//Output of transpose
 	if(myRank == 0){
-		puts("\nResult of A^(T) Done");
+		puts("\nResult of Inner Product Done");
 		//printMat(&result);
 		free(result.arr);
 	}
@@ -143,13 +153,13 @@ int main(int argc, char** argv){
 		//printMat(&result);
 		free(result.arr);
 	}
-
+	
 	MPI_Finalize();
 	free(matrixA.arr);
 	free(matrixB.arr);
-
 	return 0;
 
 
 }
+
 
