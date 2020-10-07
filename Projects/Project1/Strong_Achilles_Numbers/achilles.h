@@ -13,8 +13,8 @@ int isPrime(int num){
 }
 
 int powerful(int p/*Factor*/, int n/*Number*/){
-	int b = p * p; //p^2
-	if(n % b == 0){
+	//int b = p * p; //p^2
+	if(n % (p*p) == 0){
 		return 1;
 	}
 	return 0;
@@ -23,9 +23,9 @@ int powerful(int p/*Factor*/, int n/*Number*/){
 int perfectPower(int n) {
 	int i;
 	for(i = 2; i <= sqrt(n); i++) {
-		int m = log(n) / log(2); //roundabout way of finding log2(n)
+		//int m = log(n) / log(2); //roundabout way of finding log2(n)
 		int j;
-		for(j = 2; j <= m; j++) {
+		for(j = 2; j <= (log(n) / log(2)); j++) {
 			if(pow(i,j) == n) {
 				return 1;
 			}
