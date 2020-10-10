@@ -17,7 +17,7 @@ int main(int argc, char** argv){
 	MPI_Comm_size(world, &worldSize);
 	MPI_Comm_rank(world, &myRank);
 	
-	struct mat matrixA, matrixB, /*solution,*/ result;
+	struct mat matrixA, matrixB, result;
 	
 	initMat(&matrixA, atoi(argv[1]), atoi(argv[2]), 1);
 	initMat(&matrixB, atoi(argv[3]), atoi(argv[4]), 1);
@@ -30,16 +30,6 @@ int main(int argc, char** argv){
 		puts("\nMatrix B\n");
 		printMat(&matrixB);
 	}*/	
-		//This is o call serial addition (Breaks for more than 1000x1000 matrices!
-		/*initMat(&solution, matrixA.rows, matrixB.cols, 0);
-		addMatS(&matrixA, &matrixB, &solution);
-		
-		//Output for Addition
-		if(myRank == 0){
-			puts("Matrices have been made, starting various operations:");
-			puts("\nSerial of A + B Done");
-			//printMat(&solution);
-		}*/
 		
 		initMat(&result, matrixA.rows, matrixB.cols, 0);
 		addMatP(&matrixA, &matrixB, &result, world, worldSize, myRank);
@@ -48,18 +38,8 @@ int main(int argc, char** argv){
 			puts("\nResult of A + B Done");
 			//printMat(&result);
 			free(result.arr);
-			//free(solution.arr);
 		}
-		//This is for serial of subtraction (Breaks for more thand 1000x1000 matrices!)
-		/*initMat(&solution, matrixA.rows, matrixB.cols, 0);
-		subMatS(&matrixA, &matrixB, &solution);
-	
-		//Output for Subtraction	
-		if(myRank == 0){
-			puts("\nSerial of A - B Done");
-			//printMat(&solution);
-		}
-		*/
+		
 		initMat(&result, matrixA.rows, matrixB.cols, 0);
 		subMatP(&matrixA, &matrixB, &result, world, worldSize, myRank);
 		
@@ -67,38 +47,16 @@ int main(int argc, char** argv){
 			puts("\nResult of A - B Done");
 			//printMat(&result);
 			free(result.arr);
-			//free(solution.arr);
 		}
-
-		//This is serial for subtraction (Breaks for more than 1000x1000 matrices!)
-		/*initMat(&solution, matrixA.rows, matrixB.cols, 0);
-		subMatS(&matrixB, &matrixA, &solution);
-		
-		if(myRank == 0){
-			puts("\nSerial of B - A Done");
-			//printMat(&solution);
-		}*/
 
 		initMat(&result, matrixA.rows, matrixB.cols, 0);
 		subMatP(&matrixB, &matrixA, &result, world, worldSize, myRank);
 		
 		if(myRank == 0){
 			puts("\nResult of B - A Done");
-			//printMat(&result);
 			free(result.arr);
-			//free(solution.arr);
 		}
-
-		//This is serial for multiplication (Breaks for more thand 1000x1000 matrices!)
-		/*initMat(&solution, matrixA.rows, matrixB.cols, 0);
-		multiMatS(&matrixA, &matrixB, &solution);
-		
-		//Output for Multiplication
-		if(myRank == 0){
-			puts("\nSerial of A * B Done");
-			//printMat(&solution);
-		}*/
-		
+	
 		initMat(&result, matrixA.rows, matrixB.cols, 0);
 		multiMatP(&matrixA, &matrixB, &result, world, worldSize, myRank);
 		
@@ -106,30 +64,21 @@ int main(int argc, char** argv){
 			puts("\nResult of A * B Done");
 			//printMat(&result);
 			free(result.arr);
-			//free(solution.arr);
 		}
-		//This is serial for multiplication (Breaks for more than 1000x1000 matrices!)
-		/*initMat(&solution, matrixA.rows, matrixB.cols, 0);
-		multiMatS(&matrixB, &matrixA, &solution);
-		
-		if(myRank == 0){
-			puts("\nSerial of B * A Done");
-			//printMat(&solution);
-		}*/
-
+	
 		initMat(&result, matrixA.rows, matrixB.cols, 0);
 		multiMatP(&matrixB, &matrixA, &result, world, worldSize, myRank);
 		if(myRank == 0){
 			puts("\nResult of B * A Done");
 			//printMat(&result);
 			free(result.arr);
-			//free(solution.arr);
 		}
 	
 	initMat(&result, matrixA.cols, matrixA.rows, 0);
 	int x = innerProd(matrixA.arr, matrixB.arr, atoi(argv[2]), world, worldSize, myRank);
 	
-	//Output of inner product
+	//Output 
+	// inner product
 	if(myRank == 0){
 		puts("\nResult of A^(T) Done");
 		printf("Inner Prod ~> %d\n", x);
