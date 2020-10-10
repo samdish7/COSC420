@@ -51,15 +51,6 @@ void printMat(struct mat* A) {
 		printf("\n");
 	}
 }
-//Serial method to Matrix Addition
-void addMatS(struct mat *A, struct mat *B, struct mat *F) {
-	int i, k;
-	for(i = 0; i < A -> rows; i++) {
-		for(k = 0; k < A -> cols; k++) {
-			ACCESS(F, i, k) = ACCESS(A, i, k) + ACCESS(B, i, k);
-		}
-	}
-}
 //Parralel method to Matrix Addition
 void addMatP(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int worldSize, int myRank) {
 	//Helper ints
@@ -102,15 +93,6 @@ void addMatP(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int wo
 	}
 	//Gathering all the data collected from the processors
 	MPI_Gatherv(finalArr, counter[myRank], MPI_INT, F -> arr, counter, displacement, MPI_INT, 0, world);
-}
-//Serial method for Matrix Subtraction
-void subMatS(struct mat *A, struct mat *B, struct mat *F) {
-	int i, k;
-	for(i = 0; i < A -> rows; i++) {
-		for(k = 0; k < A -> cols; k++) {
-			ACCESS(F, i, k) = ACCESS(A, i, k) - ACCESS(B, i, k);
-		}
-	}
 }
 //Parralel method for Matrix Subtraction
 void subMatP(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int worldSize, int myRank) {
@@ -203,24 +185,7 @@ int innerProd(int *arr1, int *arr2, int arrSize, MPI_Comm world, int worldSize, 
 		blockTotal += arrA[i] * arrB[i];
 	}
 	MPI_Reduce(&blockTotal, &total, 1, MPI_INT, MPI_SUM, 0, world);
-	if(myRank == 0) {
 		return total;
-	}
-}
-//Serial method for Matrix Multiplication
-void multiMatS(struct mat *A, struct mat *B, struct mat *F) {
-	int i, k, n;
-	if(A -> cols != B -> rows){
-		printf("Can't multiply!\n");
-		return;
-	}
-	for(i = 0; i < A -> cols; i++) {
-		for(k = 0; k < B -> cols; k++) {
-			for(n = 0; n < A -> cols; n++) {
-				ACCESS(F, i, k) += (ACCESS(A, i, n) * ACCESS(B, n, k));
-			}
-		}
-	}
 }
 //Parralel method for Matrix Multiplication
 void multiMatP(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int worldSize, int myRank) {

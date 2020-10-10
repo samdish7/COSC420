@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#SBATCH --job-name=SAN
+#SBATCH --job-name=CD
 #SBATCH --nodes=6
 #SBATCH --tasks-per-node=24
 # #SBATCH --ntasks=20
