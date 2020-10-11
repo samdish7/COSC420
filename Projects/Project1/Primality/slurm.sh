@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#SBATCH --job-name=CD
+#SBATCH --job-name=Pri
 #SBATCH --nodes=6
 #SBATCH --tasks-per-node=24
 # #SBATCH --ntasks=20
@@ -9,4 +9,4 @@
 #SBATCH --output=out/%j.log
 
 
-mpirun ~/Documents/COSC420/Projects/Project1/Strong_Achilles_Numbers/ach
+mpirun ~/Documents/COSC420/Projects/Project1/Primality/prim

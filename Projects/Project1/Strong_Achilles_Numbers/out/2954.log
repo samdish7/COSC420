@@ -58,3 +58,6 @@ I am node 125 and I found 0 SANs
 I am node 143 and I found 0 SANs
 I am node 128 and I found 0 SANs
 I am node 137 and I found 0 SANs
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 2954 ON hpcl5-2 CANCELLED AT 2020-10-11T12:24:29 ***
+slurmstepd: error: *** STEP 2954.0 ON hpcl5-2 CANCELLED AT 2020-10-11T12:24:29 ***
