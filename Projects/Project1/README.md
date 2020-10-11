@@ -236,7 +236,7 @@ How many Strong Achilles numbers are there below 1018?
 
 Our approach was similar to the previous two problems, however, this was much more complicated in the sense that there were many many more conditions and operations that needed to be checked/done. We struggled heavily with this problem because like above, we tried to brute force the algorithm with no success for even 10^8.  We ran 360 processors at it for an entire day, and still didn't give us the answer to 10^8, so 10^18 would take an unbelievable amount of time.
 
-We tried to optimize it by letting all the p`rocessors create a table of prime numbers to check because you didn't have to check any prime < 630000. Which left for each number, AT MOST 51341 numbers to check rather than our first apporach (which is seen in our serial code) which was to check all factors of N.  The only factors that matter were the prime ones however, so we thought that reducing that number of checks for both n and totient of n would speed up the result.  But it didn't seem to make any difference unfortunately.  
+We tried to optimize it by letting all the processors create a table of prime numbers to check because you didn't have to check any prime < 630000. Which left for each number, AT MOST 51341 numbers to check rather than our first apporach (which is seen in our serial code) which was to check all factors of N.  The only factors that matter were the prime ones however, so we thought that reducing that number of checks for both n and totient of n would speed up the result.  But it didn't seem to make any difference unfortunately.  
 The problem is the workload is not split evenly among the processors.  We noticed that the group is usually split in four phases. The first phase found most of the primes and therefore got done very quickly.  The second and thrid phases found some primes and had to do more work because they also found some Strong Achilles Numbers.  The last group gets the "worst" numbers and least amount of primes, so therefore their workload is absolutely absurd and takes a crazy long time to finish.
 
 If we understood the math more, maybe we could find a way to work around the brute force method, but we didn't figure anything out. Therefore, we originally started to do number of operations, but since we couldn't even get the answer to be displayed, we didn't bother. 
@@ -361,3 +361,7 @@ We didn't do much higher number testing for reasons stated above, but we were ab
 **Answer** ~> ???
 
 ==============================================
+
+## What this project taught us
+
+Brute force is a really bad method to solve large problems, even when splitting th work among many processors. As strong achilles shows us, the work load may not be split evenly amongst the processors. This means that the time taken is more affected by the heavy workloads some of the processors may experience.  So learning more effecient algorithms and understanding better how the math works can go miles into solving the problem. 
