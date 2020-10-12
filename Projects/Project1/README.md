@@ -204,11 +204,11 @@ Both serial and parallel versions were tested below.  We didn't bother testing t
 
 **P** ~> 144
 
-**Number of Calculations per Proc ~> ~
+**Number of Calculations per Proc ~> ~9,000,000,000,000 (~1.296 * 10^15 total)
 
-**Average Time** ~> 
+**Time** ~> ~ 11 hours
 
-**Answer** ~> 
+**Answer** ~> 5,437,849
 
 ==============================================
 

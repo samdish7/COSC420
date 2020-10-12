@@ -7,7 +7,7 @@
 #include<math.h>
 #include<stdlib.h>
 #include"primality.h"
-#define MAX 500000
+#define MAX 30000000
 int main(int argc, char** argv){
 	MPI_Init(&argc, &argv);
 	MPI_Comm world = MPI_COMM_WORLD;
@@ -18,7 +18,7 @@ int main(int argc, char** argv){
 	MPI_Comm_rank(world,&myRank);
 
 	long int found = 0, total = 0;
-	long long unsigned int n = 2, t, numOps = 0;
+	long long unsigned int n = 29900000, t, numOps = 0;
 	
 	long int* localCou = malloc(sizeof(long));
 	long int* totalCou = malloc(sizeof(long));
@@ -29,7 +29,7 @@ int main(int argc, char** argv){
 		t = 2 * (n * n) - 1;
 		numOps += 3;
 		if(isPrime(t)) {
-			// printf("%llu ", n);
+			printf("%llu ", n);
 			numOps += (sqrt(t) + 3);
 			found++;
 		}
