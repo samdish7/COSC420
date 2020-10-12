@@ -7,9 +7,8 @@
 #include<string.h>
 #include<stdlib.h>
 #include"achilles.h"
-#define UPPER 100000000
+#define UPPER 1000000
 #define MAX 3000000
-//Implement Gather and Gatherv for primes!
 int main(int argc, char** argv){
         MPI_Init(&argc, &argv);
         MPI_Comm world = MPI_COMM_WORLD;
@@ -103,6 +102,7 @@ int main(int argc, char** argv){
 				if(x2){
 					if(!perfectPower(t)){
 						// Strong achillies!
+						printf("Rank %d ~> %llu ", myRank,  n);
 						found++;
 					}
 				}			
