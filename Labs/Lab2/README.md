@@ -1,4 +1,4 @@
-# Lab 2 Scatter/Reduce MPI Functions & Matrix Library
+# Lab 2; Scatter/Reduce MPI Functions & Matrix Library
 
 ### Collaborators: Sam Disharoon and Jordan Welch
 
