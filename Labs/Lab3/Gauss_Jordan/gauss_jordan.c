@@ -13,7 +13,6 @@ int main(int argc, char** argv){
 	int worldSize, myRank;
 	
 	double startTime, stopTime;
-	startTime = MPI_Wtime();
 
 	MPI_Comm world = MPI_COMM_WORLD;
 	
@@ -50,11 +49,15 @@ int main(int argc, char** argv){
 	
 	// this section tests the matric multiplication function that we fixed from Lab 2
 		
-	initMat(&result, matrixA.rows, matrixB.cols, 0);
-	multiMat(&matrixA, &matrixB, &result, world, worldSize, myRank);
+		startTime = MPI_Wtime();
+	
+		initMat(&result, matrixA.rows, matrixB.cols, 0);
+		multiMat(&matrixA, &matrixB, &result, world, worldSize, myRank);
+		stopTime = MPI_Wtime();
 		
 		if(myRank == 0){
 			puts("\nResult of A * B Done");
+        		printf("A * B ~> took %1.2f seconds\n", stopTime-startTime);
 			//printMat(&result);
 			free(result.arr);
 		}
@@ -66,10 +69,14 @@ int main(int argc, char** argv){
 		}
 	} else {
 	
+		startTime = MPI_Wtime();
+		
 		initMat(&result, matrixA.rows, matrixB.cols, 0);
 		multiMat(&matrixB, &matrixA, &result, world, worldSize, myRank);
+		stopTime = MPI_Wtime();
 		if(myRank == 0){
 			puts("\nResult of B * A Done");
+        		printf("B * A ~> took %1.2f seconds\n", stopTime-startTime);
 			//printMat(&result);
 			free(result.arr);
 		}
@@ -82,18 +89,23 @@ int main(int argc, char** argv){
 		}
 	} else {
 		// testing serial of Gauss-Jordan
+		
+		startTime = MPI_Wtime();
+		
 		initMat(&result, matrixA.cols, 1, 1);
 		gauss_jordanS(&matrixA, &result);
+		stopTime = MPI_Wtime();
+		
 		if(myRank == 0){
-			puts("Answer to Gauss-Jordan Elimination of Matrix A:");
-			printMat(&result);
+			puts("\nAnswer to Gauss-Jordan Elimination of Matrix A:");
+        		printf("Gauss-Jordan ~> took %1.2f seconds\n", stopTime-startTime);
+			//printMat(&result);
 			free(result.arr);
 		}
 		
 	}
 
-	stopTime = MPI_Wtime();
-        printf("MPI_Wtime measured %1.2f seconds\n", stopTime-startTime);
+	
 	MPI_Finalize();
 	free(matrixA.arr);
 	free(matrixB.arr);
