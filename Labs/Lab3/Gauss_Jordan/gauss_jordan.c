@@ -29,14 +29,14 @@ int main(int argc, char** argv){
 	initMat(&matrixA, atoi(argv[1]), atoi(argv[2]), 1);
 	initMat(&matrixB, atoi(argv[3]), atoi(argv[4]), 1);
 	
-	
+	/*
 	if(myRank == 0){
 		puts("Matrix A");
 		printMat(&matrixA);
 		puts("Matrix B");
 		printMat(&matrixB);
 	}
-	
+	*/
 
 	if(matrixA.cols != matrixB.rows){
 		if(myRank == 0){

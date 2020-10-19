@@ -15,13 +15,13 @@
 // how our matrix is implemented
 struct mat {
 	int rows, cols;
-	int *arr;
+	double *arr;
 };
 // initiate a new matrix
 void initMat(struct mat* A, int r, int c, int fill) {
 	A -> rows = r;
 	A -> cols = c;
-	A -> arr = malloc(r * c * sizeof(int));
+	A -> arr = malloc(r * c * sizeof(double));
 	// this fills the matrix with values
 	if(fill) {
 		int i, k;
@@ -46,7 +46,7 @@ void printMat(struct mat* A) {
 	int i, k;
 	for(i = 0; i < A -> rows; i++) {
 		for(k = 0; k < A -> cols; k++) {
-			printf("%d ", ACCESS(A, i, k));
+			printf("%8.3f ", ACCESS(A, i, k));
 		}
 		printf("\n");
 	}
