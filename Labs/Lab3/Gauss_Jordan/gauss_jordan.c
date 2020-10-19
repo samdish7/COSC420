@@ -12,6 +12,9 @@ int main(int argc, char** argv){
 	
 	int worldSize, myRank;
 	
+	double startTime, stopTime;
+	startTime = MPI_Wtime();
+
 	MPI_Comm world = MPI_COMM_WORLD;
 	
 	MPI_Comm_size(world, &worldSize);
@@ -89,11 +92,13 @@ int main(int argc, char** argv){
 		
 	}
 
-
-
+	stopTime = MPI_Wtime();
+        printf("MPI_Wtime measured %1.2f seconds\n", stopTime-startTime);
 	MPI_Finalize();
 	free(matrixA.arr);
 	free(matrixB.arr);
+	fflush(stdout);
+
 	return 0;
 
 
