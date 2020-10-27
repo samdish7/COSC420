@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <mpi.h>
 #include <time.h>
+#include <math.h>
 
 //These make accessing elements in the matrices easier
 #define INDEX(n, m, i, j) m * i + j
@@ -23,20 +24,27 @@ void initMat(struct mat* A, int r, int c, int fill) {
 	A -> cols = c;
 	A -> arr = malloc(r * c * sizeof(double));
 	// this fills the matrix with values
-	if(fill) {
+	if(fill == 1) {
 		int i, k;
 		for(i = 0; i < r; i++) {
 			for(k = 0; k < c; k++) {
 				ACCESS(A, i, k) = rand() % 10 + 1;
 			}
 		}		
-	}
-	// this acts as a memset by removing all values
-	else {
+	} else if(fill == 2){
+	// this creates a vector of all 1s
 		int i, k;
 		for(i = 0; i < r; i++) {
 			for(k = 0; k < c; k++) {
-				ACCESS(A, i, k) = 0;
+				ACCESS(A, i, k) = 1;
+			}
+		}
+	} else {
+	// this acts as a memset to clear a matrix of all values
+		int i, k;
+		for(i = 0; i < r; i++) {
+			for(k = 0; k < c; k++) {
+				ACCESS(A, i, k) = 1;
 			}
 		}
 	}
@@ -216,6 +224,7 @@ void multiMat(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int w
 	free(arrB);
 }
 // serial method of Gauss-Jordan Elimination
+// Doesn't work :(
 void gauss_jordanS(struct mat *A, struct mat* B){
 	int i, j, r, c;
 	double* local = malloc(sizeof(double) * A -> rows);
@@ -241,5 +250,24 @@ void gauss_jordanS(struct mat *A, struct mat* B){
 		ACCESS(A, r, r) /= ACCESS(A, r, r);
 	}
 }
-
+// method for calculating the euclidean norm
+double euclidean_norm(struct mat* A){
+	int i;
+	double x, norm = 0;
+	
+	for(i = 0; i < A -> rows; i++){
+		x = abs(ACCESS(A, i, 0));
+		norm += x * x;
+	}
+	return sqrt(norm);
+}
+// method for normalizing a matrix
+void normalize(struct mat* A){
+	int i;
+	double x, enorm = euclidean_norm(A);
+	for(i = 0; i < A -> rows; i++){
+		x = ACCESS(A, i, 0);
+		ACCESS(A, i, 0) = x / enorm;
+	}
+}
 #endif
