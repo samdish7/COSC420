@@ -1,0 +1,11 @@
+# All useless files
+*.swp
+**/.DS_Store
+
+# All data and zipped files
+*.ods
+*.zip
+*.pdf
+*.docx
+*.DOCX
+**/Projects/Project2/arXiv_Search_Engine/data
