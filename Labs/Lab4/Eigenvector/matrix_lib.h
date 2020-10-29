@@ -54,7 +54,7 @@ void printMat(struct mat* A) {
 	int i, k;
 	for(i = 0; i < A -> rows; i++) {
 		for(k = 0; k < A -> cols; k++) {
-			printf("%8.3f ", ACCESS(A, i, k));
+			printf("%8.11f ", ACCESS(A, i, k));
 		}
 		printf("\n");
 	}

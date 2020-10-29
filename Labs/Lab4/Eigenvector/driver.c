@@ -1,7 +1,7 @@
 //Sam Disharoon & Jordan Welch
 //Various tests for the eigenvector functions
 #include "matrix_lib.h"
-#define tiny 0.0000000000001
+#define tiny 0.0000000001
 #define limit 100000
 int main(int argc, char** argv){
 	// set up MPI world
@@ -19,13 +19,15 @@ int main(int argc, char** argv){
 	// using arguments to test our algorithms before reading in a file
 	
 	srand(time(NULL));
-	struct mat matrixA, sVector;
 	if(argc != 2){
 		if(myRank == 0){
 			printf("Usage ~> ./driver a\n");
 		}
 		return 1;
 	}
+	
+	int i = 0;
+	struct mat matrixA, sVector;
 	
 	initMat(&matrixA, atoi(argv[1]), atoi(argv[1]), 1);
 	initMat(&sVector, atoi(argv[1]), 1, 2);
@@ -51,6 +53,9 @@ int main(int argc, char** argv){
 	
 	if(myRank == 0){
 		puts("Largest Eigenvector of A:");
+		printMat(&sVector);
+		
+		puts("After normalizing 1000 times:");
 		printMat(&sVector);
 	}
 	
