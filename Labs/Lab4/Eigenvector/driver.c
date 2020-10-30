@@ -9,7 +9,7 @@ int main(int argc, char** argv){
 	
 	int worldSize, myRank;
 	
-	double startTime, stopTime;
+	//double startTime, stopTime;
 
 	MPI_Comm world = MPI_COMM_WORLD;
 	
@@ -27,41 +27,49 @@ int main(int argc, char** argv){
 	}
 	
 	int i = 0;
-	struct mat matrixA, sVector;
+	struct mat matrixA, sVector, copy;
 	
 	initMat(&matrixA, atoi(argv[1]), atoi(argv[1]), 1);
 	initMat(&sVector, atoi(argv[1]), 1, 2);
-	
+	initMat(&copy, atoi(argv[1]), 1, 0);
 	
 	if(myRank == 0){
 		puts("Matrix A");
 		printMat(&matrixA);
-		/*		
- 		puts("Matrix B");
-		printMat(&sVector);
-		*/
 	}
-	
 	
 	// this section tests the Eigenvector methods, matrices MUST be sqaure!
 	// update solution vector (x <- Ax)
 	multiMat(&matrixA, &sVector, &sVector, world, worldSize, myRank);
-	
+	/*if(myRank == 0){
+		puts("A * x\n===================");
+		printMat(&sVector);
+	}*/
+
 	// normalize solution vector
 	normalize(&sVector);
+	if(myRank == 0){
+		puts("1 normalization of A:");
+		printMat(&sVector);
+		puts("==================");
+	}
 	
-	
+	// repeat
+	for(; i < 2; i++){
+		multiMat(&matrixA, &sVector, &sVector, world, worldSize, myRank);
+		normalize(&sVector);
+		printMat(&sVector);
+	}
+		copyMat(&sVector, &copy);
 	if(myRank == 0){
 		puts("Largest Eigenvector of A:");
-		printMat(&sVector);
-		
-		puts("After normalizing 1000 times:");
 		printMat(&sVector);
 	}
 	
 	MPI_Finalize();
 	free(matrixA.arr);
 	free(sVector.arr);
+	free(copy.arr);
 	fflush(stdout);
 
 	return 0;

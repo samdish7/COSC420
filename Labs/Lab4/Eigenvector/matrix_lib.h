@@ -49,6 +49,19 @@ void initMat(struct mat* A, int r, int c, int fill) {
 		}
 	}
 }
+// copy matrix
+void copyMat(struct mat* A, struct mat* copyA){
+	copyA -> rows = A -> rows;
+	copyA -> cols = A -> cols;
+	copyA -> arr = malloc(copyA -> rows * copyA -> cols * sizeof(double));
+	
+	int i, k;
+	for(i = 0; i < copyA -> rows; i++){
+		for(k = 0; k < copyA -> cols; k++){
+			ACCESS(copyA, i, k) = ACCESS(A, i, k);
+		}
+	}
+}
 // print the matrix
 void printMat(struct mat* A) {
 	int i, k;
@@ -253,21 +266,24 @@ void gauss_jordanS(struct mat *A, struct mat* B){
 // method for calculating the euclidean norm
 double euclidean_norm(struct mat* A){
 	int i;
-	double x, norm = 0;
+	double x, norm = 0.0;
 	
 	for(i = 0; i < A -> rows; i++){
-		x = abs(ACCESS(A, i, 0));
+		x = ACCESS(A, i, 0);
 		norm += x * x;
+		//printf("X ~> %8.11f\n",x);
 	}
 	return sqrt(norm);
 }
 // method for normalizing a matrix
 void normalize(struct mat* A){
 	int i;
+	//printMat(A);
 	double x, enorm = euclidean_norm(A);
 	for(i = 0; i < A -> rows; i++){
 		x = ACCESS(A, i, 0);
 		ACCESS(A, i, 0) = x / enorm;
+		//printf("%8.11f\n", ACCESS(A, i, 0));
 	}
 }
 #endif
