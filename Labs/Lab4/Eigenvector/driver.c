@@ -26,6 +26,7 @@ int main(int argc, char** argv){
 		return 1;
 	}
 	
+	//FILE* file;
 	int i = 0;
 	struct mat matrixA, sVector, copy;
 	
@@ -54,11 +55,16 @@ int main(int argc, char** argv){
 		puts("==================");
 	}
 	
-	// repeat
-	for(; i < 2; i++){
+	// repeat (This is where the problem lies)
+	for(; i < 3; i++){
+		printf("Ax -> x %d\n", i);
 		multiMat(&matrixA, &sVector, &sVector, world, worldSize, myRank);
+		printMat(&sVector);
+		puts("==================");
+		printf("Normalize %d\n", i);
 		normalize(&sVector);
 		printMat(&sVector);
+		puts("==================");
 	}
 		copyMat(&sVector, &copy);
 	if(myRank == 0){
