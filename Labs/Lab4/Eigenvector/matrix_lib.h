@@ -166,11 +166,12 @@ void transpose(struct mat *A, struct mat *F) {
 	}
 }
 // inner Product method (parallel)
-int innerProd(int *arr1, int *arr2, int arrSize, MPI_Comm world, int worldSize, int myRank) {
-	int blockTotal = 0, i = 0, total = 0;
+float innerProd(float *arr1, float *arr2, int arrSize, MPI_Comm world, int worldSize, int myRank) {
+	float blockTotal = 0, total = 0;
 	
 	int blockSize = arrSize / worldSize;
 	int overflow = arrSize % worldSize + blockSize;
+	int i;
 	
 	int counter[worldSize];
 	int displs[worldSize];
@@ -186,8 +187,8 @@ int innerProd(int *arr1, int *arr2, int arrSize, MPI_Comm world, int worldSize, 
 		}
 	}
 	
-	int* arrB = malloc(sizeof(int) * counter[myRank]);
-	int* arrA = malloc(sizeof(int) * counter[myRank]);
+	float* arrB = malloc(sizeof(int) * counter[myRank]);
+	float* arrA = malloc(sizeof(int) * counter[myRank]);
 
 	for(i = 0; i < counter[myRank]; i++) {
 		arrA[i] = 0;
@@ -217,9 +218,10 @@ void multiMat(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int w
 	initMat(&T, B -> rows, B -> cols, 0);
 	transpose(B, &T);
 	
-	int i, k, n, blockTotal;
-	int *arrA = malloc(A -> cols * sizeof(int));
-	int *arrB = malloc(B -> cols * sizeof(int));
+	int i, k, n;
+	float blockTotal;
+	float *arrA = malloc(A -> cols * sizeof(int));
+	float *arrB = malloc(B -> cols * sizeof(int));
 	
 	for(i = 0; i < F -> rows; i++) {
 		for(k = 0; k < F -> cols; k++) {
