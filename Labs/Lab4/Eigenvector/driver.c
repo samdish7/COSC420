@@ -1,114 +1,75 @@
 //Sam Disharoon & Jordan Welch
-//Various tests for the gauss jordan algorithm and fixed multiplication
-#include <stdio.h>
-#include <stdlib.h>
-#include <mpi.h>
-#include <time.h>
+//Various tests for the eigenvector functions
 #include "matrix_lib.h"
-
+#define tiny 0.0000000001
+#define limit 100000
 int main(int argc, char** argv){
+	// set up MPI world
 	MPI_Init(NULL, NULL);
-	srand(time(NULL));
 	
 	int worldSize, myRank;
 	
-	double startTime, stopTime;
+	//double startTime, stopTime;
 
 	MPI_Comm world = MPI_COMM_WORLD;
 	
 	MPI_Comm_size(world, &worldSize);
 	MPI_Comm_rank(world, &myRank);
 	
-	struct mat matrixA, matrixB, result;
+	// using arguments to test our algorithms before reading in a file
 	
-	if(argc != 5){
+	srand(time(NULL));
+	if(argc != 2){
 		if(myRank == 0){
-			printf("Usage ~> ./gauss a b c d\n");
+			printf("Usage ~> ./driver a\n");
 		}
 		return 1;
 	}
-		
-	initMat(&matrixA, atoi(argv[1]), atoi(argv[2]), 1);
-	initMat(&matrixB, atoi(argv[3]), atoi(argv[4]), 1);
 	
-	/*
+	int i = 0;
+	struct mat matrixA, sVector, copy;
+	
+	initMat(&matrixA, atoi(argv[1]), atoi(argv[1]), 1);
+	initMat(&sVector, atoi(argv[1]), 1, 2);
+	initMat(&copy, atoi(argv[1]), 1, 0);
+	
 	if(myRank == 0){
 		puts("Matrix A");
 		printMat(&matrixA);
-		puts("Matrix B");
-		printMat(&matrixB);
 	}
-	*/
+	
+	// this section tests the Eigenvector methods, matrices MUST be sqaure!
+	// update solution vector (x <- Ax)
+	multiMat(&matrixA, &sVector, &sVector, world, worldSize, myRank);
+	/*if(myRank == 0){
+		puts("A * x\n===================");
+		printMat(&sVector);
+	}*/
 
-	if(matrixA.cols != matrixB.rows){
-		if(myRank == 0){
-			puts("Error!!!!");
-			puts("matrix A's row must match matrix B's columns!");
-		}
-	} else {
-	
-	// this section tests the matric multiplication function that we fixed from Lab 2
-		
-		startTime = MPI_Wtime();
-	
-		initMat(&result, matrixA.rows, matrixB.cols, 0);
-		multiMat(&matrixA, &matrixB, &result, world, worldSize, myRank);
-		stopTime = MPI_Wtime();
-		
-		if(myRank == 0){
-			puts("\nResult of A * B Done");
-        		printf("A * B ~> took %1.2f seconds\n", stopTime-startTime);
-			//printMat(&result);
-			free(result.arr);
-		}
-	}
-	if(matrixB.cols != matrixA.rows){
-		if(myRank == 0){
-			puts("Error!!!");
-			puts("matrix B's row must match matrix A's columns!");
-		}
-	} else {
-	
-		startTime = MPI_Wtime();
-		
-		initMat(&result, matrixA.rows, matrixB.cols, 0);
-		multiMat(&matrixB, &matrixA, &result, world, worldSize, myRank);
-		stopTime = MPI_Wtime();
-		if(myRank == 0){
-			puts("\nResult of B * A Done");
-        		printf("B * A ~> took %1.2f seconds\n", stopTime-startTime);
-			//printMat(&result);
-			free(result.arr);
-		}
+	// normalize solution vector
+	normalize(&sVector);
+	if(myRank == 0){
+		puts("1 normalization of A:");
+		printMat(&sVector);
+		puts("==================");
 	}
 	
-	// this section tests the gauss-jordan algorithm, matrices MUST be sqaure!
-	if(matrixA.cols != matrixA.rows || matrixB.cols != matrixB.rows){
-		if(myRank == 0){
-			puts("Can't do Gauss-Jordan unless matrices are Square!");
-		}
-	} else {
-		// testing serial of Gauss-Jordan
-		
-		startTime = MPI_Wtime();
-		
-		initMat(&result, matrixA.cols, 1, 1);
-		gauss_jordanS(&matrixA, &result);
-		stopTime = MPI_Wtime();
-		
-		if(myRank == 0){
-			puts("\nAnswer to Gauss-Jordan Elimination of Matrix A:");
-        		printf("Gauss-Jordan ~> took %1.2f seconds\n", stopTime-startTime);
-			//printMat(&result);
-			free(result.arr);
-		}
-		
+	// repeat
+	for(; i < 2; i++){
+		multiMat(&matrixA, &sVector, &sVector, world, worldSize, myRank);
+		normalize(&sVector);
+		printMat(&sVector);
 	}
-
+		copyMat(&sVector, &copy);
+	if(myRank == 0){
+		puts("Largest Eigenvector of A:");
+		printMat(&sVector);
+	}
 	
 	MPI_Finalize();
 	free(matrixA.arr);
-	free(matrixB.arr);
+	free(sVector.arr);
+	free(copy.arr);
 	fflush(stdout);
 
 	return 0;
