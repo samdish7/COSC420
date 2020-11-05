@@ -1,8 +1,7 @@
 //Sam Disharoon & Jordan Welch
 //Various tests for the eigenvector functions
 #include "matrix_lib.h"
-#define tiny 0.0000000001
-#define limit 100000
+#define limit 20
 int main(int argc, char** argv){
 	// set up MPI world
 	MPI_Init(NULL, NULL);
@@ -28,20 +27,27 @@ int main(int argc, char** argv){
 	
 	//FILE* file;
 	int i = 0;
-	struct mat matrixA, sVector, copy;
-	
+	struct mat matrixA, sVector; //, result;
+
 	initMat(&matrixA, atoi(argv[1]), atoi(argv[1]), 1);
 	initMat(&sVector, atoi(argv[1]), 1, 2);
-	initMat(&copy, atoi(argv[1]), 1, 0);
+	//initMat(&result, atoi(argv[1]), 1, 0);
 	
+	/*
 	if(myRank == 0){
 		puts("Matrix A");
 		printMat(&matrixA);
+		puts("sVector");
+		printMat(&sVector);
 	}
+	*/
+
+	// this section tests the Eigenvector methods;
+	//  matrices MUST be sqaure!
 	
-	// this section tests the Eigenvector methods, matrices MUST be sqaure!
 	// update solution vector (x <- Ax)
 	multiMat(&matrixA, &sVector, &sVector, world, worldSize, myRank);
+
 	/*if(myRank == 0){
 		puts("A * x\n===================");
 		printMat(&sVector);
@@ -54,19 +60,27 @@ int main(int argc, char** argv){
 		printMat(&sVector);
 		puts("==================");
 	}
-	
-	// repeat (This is where the problem lies)
-	for(; i < 3; i++){
-		printf("Ax -> x %d\n", i);
+		//copyMat(&sVector, &copy);
+		//free(result.arr);
+	// repeat
+	for(; i < limit - 1; i++){
+		//initMat(&result, atoi(argv[1]), 1, 0);
 		multiMat(&matrixA, &sVector, &sVector, world, worldSize, myRank);
-		printMat(&sVector);
-		puts("==================");
-		printf("Normalize %d\n", i);
+		printf("Normalize %d\n", i + 2);
 		normalize(&sVector);
 		printMat(&sVector);
 		puts("==================");
+		//subMat(&sVector, &copy, &result, world, worldSize, myRank);
+		//copyMat(&sVector, &copy);
+		//free(result.arr);
+		
+		// compare method attempts to stop it when it has reached a certain limit, but we had problems getting it to work, so we scrapped it
+		/*
+		if(compare(&result)){
+			break;
+		}
+		*/
 	}
-		copyMat(&sVector, &copy);
 	if(myRank == 0){
 		puts("Largest Eigenvector of A:");
 		printMat(&sVector);
@@ -75,7 +89,7 @@ int main(int argc, char** argv){
 	MPI_Finalize();
 	free(matrixA.arr);
 	free(sVector.arr);
-	free(copy.arr);
+	//free(copy.arr);
 	fflush(stdout);
 
 	return 0;

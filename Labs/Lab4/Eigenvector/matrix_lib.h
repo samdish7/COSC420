@@ -8,7 +8,6 @@
 #include <mpi.h>
 #include <time.h>
 #include <math.h>
-
 //These make accessing elements in the matrices easier
 #define INDEX(n, m, i, j) m * i + j
 #define ACCESS(A, i, j) A -> arr [INDEX(A -> rows, A -> cols, i, j)]
@@ -23,17 +22,16 @@ void initMat(struct mat* A, int r, int c, int fill) {
 	A -> rows = r;
 	A -> cols = c;
 	A -> arr = malloc(r * c * sizeof(double));
+	int i, k;
 	// this fills the matrix with values
 	if(fill == 1) {
-		int i, k;
 		for(i = 0; i < r; i++) {
 			for(k = 0; k < c; k++) {
-				ACCESS(A, i, k) = rand() % 10 + 1;
+				ACCESS(A, i, k) = rand() % 20 + 1;
 			}
 		}		
 	} else if(fill == 2){
 	// this creates a vector of all 1s
-		int i, k;
 		for(i = 0; i < r; i++) {
 			for(k = 0; k < c; k++) {
 				ACCESS(A, i, k) = 1;
@@ -41,10 +39,9 @@ void initMat(struct mat* A, int r, int c, int fill) {
 		}
 	} else {
 	// this acts as a memset to clear a matrix of all values
-		int i, k;
 		for(i = 0; i < r; i++) {
 			for(k = 0; k < c; k++) {
-				ACCESS(A, i, k) = 1;
+				ACCESS(A, i, k) = 0;
 			}
 		}
 	}
@@ -69,8 +66,25 @@ void printMat(struct mat* A) {
 		for(k = 0; k < A -> cols; k++) {
 			printf("%8.11f ", ACCESS(A, i, k));
 		}
-		printf("\n");
+		puts("");
 	}
+}
+// method to test when the normalization is complete
+int compare(struct mat *A){
+	int i, k;
+	double tiny = 0.00000000001;
+	printf("Compare\n");
+	printMat(A);
+	for(i = 0; i < A -> rows; i++){
+		for(k = 0; k < A -> cols; k++){
+			if(tiny > abs(ACCESS(A, i, k))){
+				puts("Limit Reached!");
+				return 1;
+			}
+		}
+	}
+	return 0;
+
 }
 // method to Matrix Addition (parallel)
 void addMat(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int worldSize, int myRank) {
@@ -94,9 +108,9 @@ void addMat(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int wor
 		}
 	}
 	// smaller matrices
-	int arrA[counter[myRank]];
-	int arrB[counter[myRank]];
-	int finalArr[counter[myRank]];
+	double arrA[counter[myRank]];
+	double arrB[counter[myRank]];
+	double finalArr[counter[myRank]];
 	
 	// clear the blocks
 	for(i = 0; i < counter[myRank]; i++) {
@@ -106,14 +120,14 @@ void addMat(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int wor
 		arrB[i] = 0;
 	}
 	// calling scatter functions to distribute to the processors
-	MPI_Scatterv(A -> arr, counter, displs, MPI_INT, arrA, counter[myRank], MPI_INT, 0, world);
-	MPI_Scatterv(B -> arr, counter, displs, MPI_INT, arrB, counter[myRank], MPI_INT, 0, world);
+	MPI_Scatterv(A -> arr, counter, displs, MPI_DOUBLE, arrA, counter[myRank], MPI_DOUBLE, 0, world);
+	MPI_Scatterv(B -> arr, counter, displs, MPI_DOUBLE, arrB, counter[myRank], MPI_DOUBLE, 0, world);
 	
 	for(i = 0; i < counter[myRank]; i++) {
 		finalArr[i] = arrA[i] + arrB[i];
 	}
 	// gathering all the data collected from the processors
-	MPI_Gatherv(finalArr, counter[myRank], MPI_INT, F -> arr, counter, displs, MPI_INT, 0, world);
+	MPI_Gatherv(finalArr, counter[myRank], MPI_DOUBLE, F -> arr, counter, displs, MPI_DOUBLE, 0, world);
 }
 // method for Matrix Subtraction (parallel)
 void subMat(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int worldSize, int myRank) {
@@ -137,9 +151,9 @@ void subMat(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int wor
 		}
 	}
 	// smaller matrices
-	int arrA[counter[myRank]];
-	int arrB[counter[myRank]];
-	int finalArr[counter[myRank]];
+	double arrA[counter[myRank]];
+	double arrB[counter[myRank]];
+	double finalArr[counter[myRank]];
 	// clears the blocks
 	for(i = 0; i < counter[myRank]; i++) {
 		arrA[i] = 0;
@@ -148,13 +162,13 @@ void subMat(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int wor
 		arrB[i] = 0;
 	}
 	// call scatter to distribute the data to processors
-	MPI_Scatterv(A -> arr, counter, displs, MPI_INT, arrA, counter[myRank], MPI_INT, 0, world);
-	MPI_Scatterv(B -> arr, counter, displs, MPI_INT, arrB, counter[myRank], MPI_INT, 0, world);
+	MPI_Scatterv(A -> arr, counter, displs, MPI_DOUBLE, arrA, counter[myRank], MPI_DOUBLE, 0, world);
+	MPI_Scatterv(B -> arr, counter, displs, MPI_DOUBLE, arrB, counter[myRank], MPI_DOUBLE, 0, world);
 	for(i = 0; i < counter[myRank]; i++) {
 		finalArr[i] = arrA[i] - arrB[i];
 	}
 	// gather all data from processors
-	MPI_Gatherv(finalArr, counter[myRank], MPI_INT, F -> arr, counter, displs, MPI_INT, 0, world);
+	MPI_Gatherv(finalArr, counter[myRank], MPI_DOUBLE, F -> arr, counter, displs, MPI_DOUBLE, 0, world);
 }
 // method to find Transpose of a Matrix
 void transpose(struct mat *A, struct mat *F) {
@@ -166,8 +180,8 @@ void transpose(struct mat *A, struct mat *F) {
 	}
 }
 // inner Product method (parallel)
-float innerProd(float *arr1, float *arr2, int arrSize, MPI_Comm world, int worldSize, int myRank) {
-	float blockTotal = 0, total = 0;
+double innerProd(double *arr1, double *arr2, int arrSize, MPI_Comm world, int worldSize, int myRank) {
+	double blockTotal = 0, total = 0;
 	
 	int blockSize = arrSize / worldSize;
 	int overflow = arrSize % worldSize + blockSize;
@@ -187,8 +201,8 @@ float innerProd(float *arr1, float *arr2, int arrSize, MPI_Comm world, int world
 		}
 	}
 	
-	float* arrB = malloc(sizeof(int) * counter[myRank]);
-	float* arrA = malloc(sizeof(int) * counter[myRank]);
+	double* arrB = malloc(sizeof(double) * counter[myRank]);
+	double* arrA = malloc(sizeof(double) * counter[myRank]);
 
 	for(i = 0; i < counter[myRank]; i++) {
 		arrA[i] = 0;
@@ -197,13 +211,13 @@ float innerProd(float *arr1, float *arr2, int arrSize, MPI_Comm world, int world
 		arrB[i] = 0;
 	}
 	
-	MPI_Scatterv(arr1, counter, displs, MPI_INT, arrA, counter[myRank], MPI_INT, 0, world);
-	MPI_Scatterv(arr2, counter, displs, MPI_INT, arrB, counter[myRank], MPI_INT, 0, world);
+	MPI_Scatterv(arr1, counter, displs, MPI_DOUBLE, arrA, counter[myRank], MPI_DOUBLE, 0, world);
+	MPI_Scatterv(arr2, counter, displs, MPI_DOUBLE, arrB, counter[myRank], MPI_DOUBLE, 0, world);
 	
 	for(i = 0; i < counter[myRank]; i++) {
 		blockTotal += arrA[i] * arrB[i];
 	}
-	MPI_Reduce(&blockTotal, &total, 1, MPI_INT, MPI_SUM, 0, world);
+	MPI_Reduce(&blockTotal, &total, 1, MPI_DOUBLE, MPI_SUM, 0, world);
 	
 	free(arrA);
 	free(arrB);
@@ -219,9 +233,9 @@ void multiMat(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int w
 	transpose(B, &T);
 	
 	int i, k, n;
-	float blockTotal;
-	float *arrA = malloc(A -> cols * sizeof(int));
-	float *arrB = malloc(B -> cols * sizeof(int));
+	double blockTotal;
+	double *arrA = malloc(A -> rows * sizeof(double));
+	double *arrB = malloc(B -> rows * sizeof(double));
 	
 	for(i = 0; i < F -> rows; i++) {
 		for(k = 0; k < F -> cols; k++) {
@@ -231,12 +245,11 @@ void multiMat(struct mat *A, struct mat *B, struct mat *F, MPI_Comm world, int w
 			}
 			blockTotal = innerProd(arrA, arrB, A -> cols, world, worldSize, myRank);
 			ACCESS(F, i, k) = blockTotal;
-			//printf("Rank %d ~> =%d=\n", myRank, blockTotal);
 		}
 	}
-	free(T.arr);
 	free(arrA);
 	free(arrB);
+	free(T.arr);
 }
 // serial method of Gauss-Jordan Elimination
 // Doesn't work :(
