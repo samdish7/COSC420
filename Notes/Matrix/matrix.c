@@ -23,7 +23,7 @@ void initMatrix(matrix *A){
 	for(i=0; i < A->rows; i++){
 		for(j=0; j < A->cols; j++){
 			//ACCESS(A,i,j) = rand() / RAND_MAX;
-			A->data[INDEX(A,i,j)] = (double) rand() / (double) RAND_MAX;
+			A->data[INDEX(A,i,j)] = rand() % 20 + 1;
 			//printf("Macro for INDEX(A,%d,%d) gives %d\n", i, j, INDEX(A,i,j));
 			//printf("Setting A[%d,%d] to %0.2f\n", i, j, A->data[INDEX(A,i,j)]);
 		}
@@ -43,8 +43,8 @@ void printMatrix(matrix* A){
 int main(){
 	srand(time(0));
 	matrix A;
-	A.rows = 3;
-	A.cols = 4;
+	A.rows = 1000;
+	A.cols = 1000;
 	
 
 	initMatrix(&A);
