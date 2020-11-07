@@ -1,4 +1,4 @@
-# Project 1; Project Euler problems 125, 302, and 307
+# Project 1; Project Euler problems 125, 216, and 307
 
 ### Collaborators ~> Sam Disharoon & Jordan Welch
 
