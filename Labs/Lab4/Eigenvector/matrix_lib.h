@@ -19,13 +19,13 @@ struct mat {
 	double *arr;
 };
 // fill a matrix read from a file (ONLY FOR SQUARE!!!)
-void fillFileMatSQ(struct mat *A, int lineSize, int row , int col, char* str, int fill){
-	int i = 0, num;
+void fillFileMatSQ(struct mat *A, int lineSize, int row, char* str, int fill){
+	int i = 0, num, col = 0;
 	if(fill){
 		for(; i < lineSize; i++){
 			if(str[i] != ' ' && str[i] != '\n'){
 				num = str[i] - '0';
-				ACCESS(A, row, col - row) = (double)num;
+				ACCESS(A, row, col) = (double) num;
 				col++;
 			}
 		}
@@ -85,7 +85,7 @@ void printMat(struct mat* A) {
 	int i, k;
 	for(i = 0; i < A -> rows; i++) {
 		for(k = 0; k < A -> cols; k++) {
-			printf("%8.11f ", ACCESS(A, i, k));
+			printf("%0.2f ", ACCESS(A, i, k));
 		}
 		puts("");
 	}

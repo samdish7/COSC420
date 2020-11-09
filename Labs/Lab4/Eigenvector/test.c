@@ -26,25 +26,25 @@ int main(int argc, char** argv){
 		int mSize = 0, svSize = 0, numLines = 0, i = 0, j;
 		struct mat matrixA, sVector; //, result;
 		//FILE* small,* smallV;
-		FILE* med,* medV;
-		//FILE* big,* bigV;
-		//char s[20], sV[5];
-		char m[200], mV[5];
-		//char b[1500], bv[5];
+		//FILE* med,* medV;
+		FILE* big,* bigV;
+		//char s[45], sV[5];
+		//char m[250], mV[5];
+		char b[2500], bV[5];
 	if(myRank == 0){
 		
 		// error checking
-		if((med = fopen(argv[1], "r")) == NULL){
+		if((big = fopen(argv[1], "r")) == NULL){
 			puts("data error!");
 			return 1;
 		}
-		if((medV = fopen(argv[2], "r")) == NULL){
+		if((bigV = fopen(argv[2], "r")) == NULL){
 			puts("sVector error!");
 			return 1;
 		}
 		
 		// get number of lines (use sVector cause it is faster)
-		while(fgets(mV, sizeof(mV), medV)){
+		while(fgets(bV, sizeof(bV), bigV)){
 			numLines++;
 		}
 		
@@ -52,47 +52,45 @@ int main(int argc, char** argv){
 		// find file size, subtract by the number of lines,
 		// divide by two because for every number,
 		// there is also a space
-		fseek(med, 0, SEEK_END);
-		mSize = ftell(med);
+		fseek(big, 0, SEEK_END);
+		mSize = ftell(big);
 		mSize = (mSize - numLines) / 2;
-		fseek(med, 0, SEEK_SET);
+		fseek(big, 0, SEEK_SET);
 		
-		fseek(medV, 0, SEEK_END);
-		svSize = ftell(medV);
+		fseek(bigV, 0, SEEK_END);
+		svSize = ftell(bigV);
 		svSize = (svSize - numLines) / 2;
-		fseek(medV, 0, SEEK_SET);
+		fseek(bigV, 0, SEEK_SET);
+
 		printf("Matrix Size ~> %d sVector Size ~> %d\n", mSize, svSize);
 
 		initMat(&matrixA, numLines, numLines, 0);
 		initMat(&sVector, numLines, 1, 0);
 		// read data and put into matrix
-		// **********************************
-		// NOTE ~> j is row number, i is column number,
-		// it looks very weird in the .h file, but it works,
-		// so we are rolling with it
+		// *********************************
+		// NOTE ~> j is row number
 		j = 0;
-		while(fgets(m, sizeof(m), med) && j < numLines){
-			char tmp[strlen(m)];
-			sprintf(tmp, "%s", m);
-			fillFileMatSQ(&matrixA, strlen(m), j, i, tmp, 1);
-			i++;
+		while(fgets(b, sizeof(b), big) && j < numLines){
+			char tmp[strlen(b)];
+			sprintf(tmp, "%s", b);
+			//printf("b ~> %s\n", b);
+			fillFileMatSQ(&matrixA, strlen(b), j, tmp, 1);
 			j++;
 		}
 		printMat(&matrixA);	
 		j = 0;
-		i = 0;
-		while(fgets(mV, sizeof(mV), medV)){
-			char buf[strlen(mV)];
-			sprintf(buf, "%s", mV);
-			fillFileMatSQ(&sVector, strlen(mV), j, 0, buf, 0);
+		while(fgets(bV, sizeof(bV), bigV)){
+			char buf[strlen(bV)];
+			sprintf(buf, "%s", bV);
+			fillFileMatSQ(&sVector, strlen(bV), j, buf, 0);
 			j++;
 		}
-		printMat(&sVector);
+		//printMat(&sVector);
 	}
 	
 	if(myRank == 0){
-		fclose(med);
-		fclose(medV);
+		fclose(big);
+		fclose(bigV);
 		free(matrixA.arr);
 		free(sVector.arr);
 	}
