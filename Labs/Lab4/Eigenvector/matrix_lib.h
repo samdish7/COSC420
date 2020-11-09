@@ -8,6 +8,7 @@
 #include <mpi.h>
 #include <time.h>
 #include <math.h>
+#include <string.h>
 //These make accessing elements in the matrices easier
 #define INDEX(n, m, i, j) m * i + j
 #define ACCESS(A, i, j) A -> arr [INDEX(A -> rows, A -> cols, i, j)]
@@ -17,7 +18,27 @@ struct mat {
 	int rows, cols;
 	double *arr;
 };
-// initiate a new matrix
+// fill a matrix read from a file (ONLY FOR SQUARE!!!)
+void fillFileMatSQ(struct mat *A, int lineSize, int row , int col, char* str, int fill){
+	int i = 0, num;
+	if(fill){
+		for(; i < lineSize; i++){
+			if(str[i] != ' ' && str[i] != '\n'){
+				num = str[i] - '0';
+				ACCESS(A, row, col - row) = (double)num;
+				col++;
+			}
+		}
+	} else {
+		for(; i < lineSize; i++){
+			if(str[i] != ' ' && str[i] != '\n'){
+				num = str[i] - '0';
+				ACCESS(A, row, 0) = (double) num;
+			}
+		}
+	}
+}
+// initiate a new randomly generated matrix
 void initMat(struct mat* A, int r, int c, int fill) {
 	A -> rows = r;
 	A -> cols = c;
