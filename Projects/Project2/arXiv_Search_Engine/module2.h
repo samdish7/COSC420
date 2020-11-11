@@ -1,5 +1,5 @@
 /* module 2 for arXiv search engine main
- * Sam Disharoon & Jordan Welch
+ * Sam Disharoon & Brock Forsythe
  * =======================================================================
  * DESCRIPTION
  *
@@ -18,7 +18,10 @@
 #include<unistd.h>
 #include"datatype.h"
 
-
+// function to read in data
+void readFile(FILE* file, char* line, int worldSize, int myRank, MPI_Comm world){
+	puts("You called me");
+}
 
 
 #endif 
