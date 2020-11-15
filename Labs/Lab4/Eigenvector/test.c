@@ -1,4 +1,4 @@
-//Sam Disharoon & Jordan Welch
+//Sam Disharoon
 //Various tests for the eigenvector functions
 #include "matrix_lib.h"
 #define limit 2
