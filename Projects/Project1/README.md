@@ -206,7 +206,7 @@ Both serial and parallel versions were tested below.  We didn't bother testing t
 
 **Number of Calculations per Proc ~> ~9,000,000,000,000 (~1.296 * 10^15 total)
 
-**Time** ~> ~ 11 hours
+**Time** ~> ~ 19 hours
 
 **Answer** ~> 5,437,849
 
