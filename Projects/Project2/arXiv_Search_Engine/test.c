@@ -92,17 +92,19 @@ int main(int argc, char* argv[])
 		puts("Invalid input\n");
 		exit(1);
 	}
+	//Sets input to size of the Metadata file
 	if(argc == 1)
 	{
 		input = 1614712;
 	}
+	//Sets input to desired size by user
 	else if(argc == 2)
 	{
 		input = (long long) atoi(argv[1]);
 	}
 
 	char buf;
-	char info[37000];
+	char info[37000]; //Allows up to 37000 bytes in arrray holder
 	memset(info, '\0', sizeof(info));
 
 	int pos = 0; // Determines if line is Id, authoer, etc...
@@ -162,6 +164,7 @@ int main(int argc, char* argv[])
        	//	read(file, &buf, 1);
        	//	}
        		printf("Reading in arxiv-metadata.txt...\n");
+		//reads data until the desired number of articles have been read in
        		while(read(file, &buf, 1) > 0 && count != input)
 		{
         		if(pos == 3)
@@ -173,6 +176,7 @@ int main(int argc, char* argv[])
             			info[size[pos]] = buf;
         		}
         		size[pos]++;
+
         		if((buf == ' ' || buf == '\n') && pos == 3)
        	 		{
             			//printf("%s ", info);
@@ -185,6 +189,7 @@ int main(int argc, char* argv[])
             				pos++;
             			}
         		}
+
 			else if(buf == '\n')
 			{
 				if(pos == 0)
@@ -192,10 +197,10 @@ int main(int argc, char* argv[])
 					//Insert into ID
 					printf("%s", info);
 					info[size[pos] - 1] = '\0';
-					arxiv.IDSize = size[pos];
+					arxiv.IDSize = size[pos]; // number of characters on that line = IDSize
 					size[pos] = 0;
-					arxiv.ID = (char*) calloc(arxiv.IDSize, sizeof(char));
-					strcpy(arxiv.ID,info);
+					arxiv.ID = (char*) calloc(arxiv.IDSize, sizeof(char)); //Assigns enough room for ID
+					strcpy(arxiv.ID,info); //Copys data from that line into pointer value
 				}
 				else if(pos == 1)
 				{
@@ -211,7 +216,7 @@ int main(int argc, char* argv[])
 				else if(pos == 2)
 				{
 					//Insert into Author
-					printf("%d - %s\n", size[pos], info);
+					//printf("%d - %s\n", size[pos], info);
 					info[size[pos] - 1] = '\0';
 					arxiv.authorSize = size[pos];
 					size[pos] = 0;
@@ -232,8 +237,8 @@ int main(int argc, char* argv[])
 					memset(arxiv.author, '\0', sizeof(size[2]));
 				
 					size[pos] = 0;
-					pos = -1;
-					count++;
+					pos = -1; //Resets position to read in next struct
+					count++; //Count moves closer to input
 				}
 				pos++;
 				memset(info, '\0', sizeof(info));
@@ -244,7 +249,7 @@ int main(int argc, char* argv[])
         	int running = 1;
         	while(running)
 		{
-            		char str[128];
+            		char str[128]; //Word can be up to 128 bytes
             		printf("Enter a word to search for (enter EXIT to quit): ");
             		scanf("%s",str);
             		if(strcmp(str, "EXIT") == 0)
@@ -258,6 +263,7 @@ int main(int argc, char* argv[])
                 		{
                     			str[i] = tolower(str[i]);
                 		}
+				//Search for word in BST
                 		wordSearch(&wordRoot, str, &root);
             		}
         	}
