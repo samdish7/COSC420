@@ -1,26 +1,37 @@
 // Test2.c
 // Sam Disharoon
-#include"datatype.h"
 #include"module2.h"
 
 int main(int argc, char** argv){
 	
 	// set up MPI world
+	MPI_Init(&argc, &argv);
+	
 	int myRank, worldSize;
 	MPI_Comm world = MPI_COMM_WORLD;
 	
 	MPI_Comm_size(world, &worldSize);
 	MPI_Comm_rank(world, &myRank);
+	MPI_Status status;
 	
 	// create variables
 	//double start, end; // timing
-	MPI_File in;
-	char* str = NULL;
-	int fSize = 0, numLines = 0;
-	long int numChar = 0; 
+	FILE* in;
+	long int fSize;
 	
-	MPI_
+	// opening files 
+	if((in = fopen("data/arxiv-citations.txt", "r")) == NULL){
+		puts("File open error!");
+		MPI_Finalize();
+		return 1;
+	}
 
+	// read file and get file size
+	fSize = readCit(in, myRank, worldSize, world);
+	if(!myRank){
+		printf("Size of test.txt is ~> %li\n", fSize);
+	}
+fclose(in);
 MPI_Finalize();
 return 0;
 }
