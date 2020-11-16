@@ -16,48 +16,16 @@
 #include<unistd.h>
 #include<time.h>
 //#include<mpi.h>
-//#include"module2.h"
+#include"datatype.h"
 
-typedef struct ARTICLE
-{
-    //Key represents the serached word
-    int key;
-    //Data that holds list of Document IDs that contain search term
-	//want to put the data into a secoknd struct 
-  	char* ID;
-		int IDSize;
-	char* title;
-		int titleSize;
-	char* author;
-		int authorSize;
-	char* abstract;
-}Article;
+//Struct for each specific article
 
-typedef struct ANODE
-{
-	Article* article;
-	struct ANODE *left, *right, *parent;
-}ArticleNode;
-
-typedef struct IDNODE
-{
-	struct IDNODE* next;
-	char* ID;
-}IDNode;
-
-typedef struct WORDNODE
-{
-	char* word;
-	IDNode* IDList;
-	struct WORDNODE* left;
-	struct WORDNODE* right;
-}WordNode;
-
+//Makes a root for the BST based on the ID of articles
 void createRoot(WordNode** root)
 {
 	(*root) = (WordNode*) malloc(sizeof(WordNode));
 	(*root)->word = (char*) calloc(16, sizeof(char));
-	strcpy((*root)->word, "merosymmetrical");
+	strcpy((*root)->word, "merosymmetrical"); //Pre found root word in nodes
 	(*root)->IDList = NULL;
 	(*root)->left = NULL;
 	(*root)->right = NULL;
