@@ -1,6 +1,6 @@
 # COSC420 High Performace Computing
 
-Labs/Notes/Projects for COSC 420 at Salisbury University
+Labs/Notes/Projects/Exams for COSC 420 at Salisbury University
 
 Instructor ~> Dr. Joseph Anderson
 
