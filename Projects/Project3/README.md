@@ -54,6 +54,12 @@ In ALG 1, b[k,j] is accesed by columns, so only one element is used in the cache
 
 *ALG 2 Average Time:* 7.9215698s
 
+5000 x 5000 matrices
+
+*ALG 1 Average Time:* 1078.9809074s
+
+*ALG 2 Average Time:* 129.8003666s
+
 As you can tell, ALG 2 becomes much more efficient as n grows.
 
 ### Next Steps
