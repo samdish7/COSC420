@@ -11,9 +11,7 @@ int main(int argc, char **argv)
 	//Allows for random numbers
 	srand(time(NULL) + myRank);
 	//Initialze the matrices from struct matrix
-	matrix A;
-	matrix B; 
-	matrix C;
+	matrix A, B, C;
 	A.rows = atoi(argv[1]);
 	A.cols = atoi(argv[2]);
 	B.rows = atoi(argv[3]);
@@ -65,6 +63,10 @@ int main(int argc, char **argv)
 	//EigenVector(&A,&B,&C,&world,myRank);
 
 	//printf("MPI_time measured: %1.6f seconds\n", stopTime-startTime);
-	//fflush(stdout);
+	fflush(stdout);
+	free(A.data);
+	free(B.data);
+	free(C.data);
+	MPI_Finalize();
 	return 0;
 }
