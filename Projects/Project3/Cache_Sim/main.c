@@ -1,4 +1,4 @@
-#include "cache.h"
+#include "matrix.h"
 
 int main(int argc, char **argv)
 {
@@ -12,12 +12,8 @@ int main(int argc, char **argv)
 	srand(time(NULL) + myRank);
 	//Initialze the matrices from struct matrix
 	matrix A, B, C;
-	A.rows = atoi(argv[1]);
-	A.cols = atoi(argv[2]);
-	B.rows = atoi(argv[3]);
-	B.cols = atoi(argv[4]);
-	C.rows = A.rows;
-	C.cols = B.cols;
+	A.rows = B.rows = C.rows = atoi(argv[1]);
+	A.cols = B.cols = C.cols = atoi(argv[2]);
 	//Fills A and B with random nums and C with an empty arra
 
 	createMatrix(&A);
@@ -59,9 +55,33 @@ int main(int argc, char **argv)
 		printf("Time taken: %9.7f\n", stopTime - startTime);
 	}
 
+	matrix G;
+	matrix H;
+	matrix I;
 
-	//EigenVector(&A,&B,&C,&world,myRank);
+	G.rows = H.rows = I.rows = atoi(argv[1]);
+	G.cols = H.cols = I.cols = atoi(argv[2]);
+	if(myRank == 0)
+	{
+		initMatrix(&G,G.rows,G.cols);
+		//printf("G matrix\n");
+		//printMatrix(&G);
+		initMatrix(&H,H.rows,H.cols);
+		//printf("H matrix\n");
+		//printMatrix(&H);
+		AllocateMatrix(&I);
+	}
 
+	startTime = MPI_Wtime();
+	multMatrix(&G,&H,&I,&world,worldSize,myRank);
+	stopTime = MPI_Wtime();
+
+	if(myRank == 0)
+	{
+		printf("Parallel Mult Matrix:\n");
+		//printMatrix(&I);
+		printf("Time taken: %9.7f\n", stopTime - startTime);
+	}
 	//printf("MPI_time measured: %1.6f seconds\n", stopTime-startTime);
 	fflush(stdout);
 	free(A.data);

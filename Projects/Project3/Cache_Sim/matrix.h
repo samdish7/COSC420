@@ -245,8 +245,6 @@ double InnerProd(matrix *A, matrix *B, MPI_Comm *world, int worldSize, int myRan
 		for(i = 0; i < matrixLen; i++)
 		{
 			sum += localMatA[i] * localMatB[i];
-			if(myRank == 0)
-				printf("Sum: %f\n", sum);
 		}
 	}
 	else
@@ -266,7 +264,6 @@ double InnerProd(matrix *A, matrix *B, MPI_Comm *world, int worldSize, int myRan
 	free(localMatB);
 	if(myRank == 0)
 	{
-		printf("inner product result: %f\n",result);
 		return result;
 	}
 	return -1;
@@ -280,9 +277,6 @@ void multMatrix(matrix *A, matrix *B, matrix *C, MPI_Comm *world, int worldSize,
 		puts("Wrong dimensions, need square matrices\n");
 	}
 
-	AllocateMatrix(A);
-	AllocateMatrix(B);
-	AllocateMatrix(C);
 	matrix Atemp;
 	matrix Btemp;
 	initMatrix(&Atemp, 1, A->cols);
