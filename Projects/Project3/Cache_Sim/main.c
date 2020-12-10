@@ -73,15 +73,27 @@ int main(int argc, char **argv)
 	}
 
 	startTime = MPI_Wtime();
-	multMatrix(&G,&H,&I,&world,worldSize,myRank);
+	classicMultMatrix(&G,&H,&I,&world,worldSize,myRank);
 	stopTime = MPI_Wtime();
 
 	if(myRank == 0)
 	{
-		printf("Parallel Mult Matrix:\n");
+		printf("Classic Parallel Mult Matrix:\n");
 		//printMatrix(&I);
 		printf("Time taken: %9.7f\n", stopTime - startTime);
 	}
+
+	startTime = MPI_Wtime();
+	FasterMultMatrix(&G,&H,&I,&world,worldSize,myRank);
+	stopTime = MPI_Wtime();
+
+	if(myRank == 0)
+	{
+		printf("Faster Parallel Mult Matrix:\n");
+		//printMatrix(&I);
+		printf("Time taken: %9.7f\n", stopTime - startTime);
+	}
+
 	//printf("MPI_time measured: %1.6f seconds\n", stopTime-startTime);
 	fflush(stdout);
 	free(A.data);
