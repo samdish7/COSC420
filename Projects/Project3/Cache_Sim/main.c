@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 */	//int blockSize = A.rows / worldSize; //Makes even blocks based on number of nodes
 	//int n = A.rows;
 	double startTime, stopTime;
-	startTime = MPI_Wtime();
+/*	startTime = MPI_Wtime();
 
 	SerialMult(&A,&B,&C);
 	stopTime = MPI_Wtime();
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 	//	printMatrix(&C);
 		printf("Time taken: %9.7f\n", stopTime - startTime);
 	}
-
+*/
 	matrix G;
 	matrix H;
 	matrix I;

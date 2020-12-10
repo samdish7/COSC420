@@ -32,7 +32,7 @@ Both ALGs access a[i,k] by the rows, but ALG 2 is invarient in the for loop, thu
 
 In ALG 1, b[k,j] is accesed by columns, so only one element is used in the cache line. ALG 2 accesses b[k,j] in each row, which takes full advantage of the utilization of the cache lines.
 
-### Data; Each tested throughly (December 4th)
+### Data; Each tested thoroughly (December 4th)
 
 #### Serialized Multiplication
 
@@ -61,6 +61,34 @@ In ALG 1, b[k,j] is accesed by columns, so only one element is used in the cache
 *ALG 2 Average Time:* 129.8003666s
 
 As you can tell, ALG 2 becomes much more efficient as n grows.
+
+###Data; Each tested thoroughly
+
+###Parallelized Multiplication on 5 nodes
+
+100 x 100 matrixes
+
+*ALG 1 Average Time:* 0.0564578s
+
+*ALG 2 Average Time:* 0.0460773
+
+1000 x 1000 matrixes
+
+*ALG 1 Average Time:* 7.6908176s
+
+*ALG 2 Average Time:* 6.6395664s
+ 
+2000 x 2000 matrixes
+
+*ALG 1 Average Time:* 69.4638822s
+
+*ALG 2 Average Time:* 39.0878732s
+ 
+5000 x 5000 matrixes
+
+*ALG 1 Average Time:* 1663.9186044s
+
+*ALG 2 Average Time:* 477.2144809s 
 
 ### Next Steps
 
