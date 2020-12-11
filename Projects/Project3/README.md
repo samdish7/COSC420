@@ -6,9 +6,11 @@
 
 This project is meant to simulate how the cache in a CPU can affect how quickly data can be manipulated. 
 
-### What we have so far; December 4th 2020
+### What we have so far; December 11th 2020
 
 We have a serialized (working) version of matrix multiplication that demostrates the difference between how two algorithms work with the cache. 
+
+We implemented a working parallel version of both cache examples, but the parallel doesn't work like it is supposed to. It gets slower as more nodes are added, plus it is slower than serial both. Which is not good. 
 
 #### Let a and b be square matrices
 
@@ -32,7 +34,9 @@ Both ALGs access a[i,k] by the rows, but ALG 2 is invarient in the for loop, thu
 
 In ALG 1, b[k,j] is accesed by columns, so only one element is used in the cache line. ALG 2 accesses b[k,j] in each row, which takes full advantage of the utilization of the cache lines.
 
-### Data; Each tested thoroughly (December 4th)
+This also is true for the parallel versions.  The column accessed function is much faster than the row access function. 
+
+### Data; Each tested thoroughly (December 4th & 11th)
 
 #### Serialized Multiplication
 
@@ -41,7 +45,7 @@ In ALG 1, b[k,j] is accesed by columns, so only one element is used in the cache
 *ALG 1 Average Time:* 0.0023930s
 
 *ALG 2 Average Time:* 0.0017116s
-
+w
 1000 x 1000 matrices
 
 *ALG 1 Average Time:* 1.6226671s
@@ -92,7 +96,7 @@ As you can tell, ALG 2 becomes much more efficient as n grows.
 
 ### Next Steps
 
-- Parallelize the functions
+- Fix the parallelized functions
 - Calculate hit/miss count and hit/miss ratio for both serial and parallel
 - Find more algorithms to simulate difference cache miss/hits
 - Provide further analysis on why this happens and how to hit peak performance
