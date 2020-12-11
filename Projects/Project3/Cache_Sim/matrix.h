@@ -270,7 +270,7 @@ double InnerProd(matrix *A, matrix *B, MPI_Comm *world, int worldSize, int myRan
 }
 
 //Altered matrix Mult
-void multMatrix(matrix *A, matrix *B, matrix *C, MPI_Comm *world, int worldSize, int myRank)
+void classicMultMatrix(matrix *A, matrix *B, matrix *C, MPI_Comm *world, int worldSize, int myRank)
 {
 	if(A->cols != B->rows)
 	{
@@ -317,6 +317,55 @@ void multMatrix(matrix *A, matrix *B, matrix *C, MPI_Comm *world, int worldSize,
 	free(Atemp.data);
 	free(Btemp.data);
 }
+
+void FasterMultMatrix(matrix *A, matrix *B, matrix *C, MPI_Comm *world, int worldSize, int myRank)
+{
+	if(A->cols != B->rows)
+	{
+		puts("Wrong dimensions, need square matrices\n");
+	}
+
+	matrix Atemp;
+	matrix Btemp;
+	initMatrix(&Atemp, 1, A->cols);
+	initMatrix(&Btemp, B->cols, 1);
+
+	int i,j,k;
+	for(i = 0; i < A->rows; i++)
+	{
+		for(k = 0; k < B->cols; k++)
+		{
+			if(myRank == 0)
+			{
+				//Copies temp A data over
+				for(j = 0; j < A->cols; j++)
+				{
+					Atemp.data[k] = ACCESS(A,i,k);
+				}
+			}
+
+			if(myRank == 0)
+			{
+				//Copies temp A data over
+				for(j = 0; j < A->cols; j++)
+				{
+					Btemp.data[k] = ACCESS(B,k,j);
+				}
+			}
+
+			double InnerProduct = InnerProd(&Atemp, &Btemp, world, worldSize, myRank);
+
+			if(myRank == 0)
+			{
+				ACCESS(C,i,j) = InnerProduct;
+			}
+		}
+	}
+
+	free(Atemp.data);
+	free(Btemp.data);
+}
+
 
 //Math for Inner Mult
 double DotProduct(double *A, double *B, int c)

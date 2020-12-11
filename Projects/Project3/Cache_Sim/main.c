@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 */	//int blockSize = A.rows / worldSize; //Makes even blocks based on number of nodes
 	//int n = A.rows;
 	double startTime, stopTime;
-	startTime = MPI_Wtime();
+/*	startTime = MPI_Wtime();
 
 	SerialMult(&A,&B,&C);
 	stopTime = MPI_Wtime();
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 	//	printMatrix(&C);
 		printf("Time taken: %9.7f\n", stopTime - startTime);
 	}
-
+*/
 	matrix G;
 	matrix H;
 	matrix I;
@@ -73,15 +73,27 @@ int main(int argc, char **argv)
 	}
 
 	startTime = MPI_Wtime();
-	multMatrix(&G,&H,&I,&world,worldSize,myRank);
+	classicMultMatrix(&G,&H,&I,&world,worldSize,myRank);
 	stopTime = MPI_Wtime();
 
 	if(myRank == 0)
 	{
-		printf("Parallel Mult Matrix:\n");
+		printf("Classic Parallel Mult Matrix:\n");
 		//printMatrix(&I);
 		printf("Time taken: %9.7f\n", stopTime - startTime);
 	}
+
+	startTime = MPI_Wtime();
+	FasterMultMatrix(&G,&H,&I,&world,worldSize,myRank);
+	stopTime = MPI_Wtime();
+
+	if(myRank == 0)
+	{
+		printf("Faster Parallel Mult Matrix:\n");
+		//printMatrix(&I);
+		printf("Time taken: %9.7f\n", stopTime - startTime);
+	}
+
 	//printf("MPI_time measured: %1.6f seconds\n", stopTime-startTime);
 	fflush(stdout);
 	free(A.data);
