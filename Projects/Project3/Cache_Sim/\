@@ -148,8 +148,7 @@ void MPISubMatrix(matrix *A, matrix *B, matrix *C, MPI_Comm* world, int worldSiz
 void SerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 {
 	int i,j,k;
-	double cacheHits = 0.0;
-	int cacheMisses = 0;
+	int cacheHits, cacheMisses;
 	int total = 0; //cacheHits + cacheMisses;
 	double cacheHitRatio = 0; //(cacheHits / total) 
 	int requests = A->rows * B->cols; //Number of data values requested
@@ -164,17 +163,12 @@ void SerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 			}
 		}
 	}
-	cacheHits = (1 / A->rows) * 100;
 	cacheMisses = ((A->rows * A->rows) / B->cols) + (A->rows * A->rows * A->rows) + ((A->rows * A->rows) / B->cols);
-	total = cacheHits + cacheMisses;
-	cacheHitRatio = cacheHits / total;
-	cacheMissRatio = (cacheMisses / requests) * 100;
+	cacheMissRatio = cacheMisses / requests;
 	if(myRank == 0)
 	{
-		printf("Number of Cache Hits: %3.2f\n", cacheHits);
 		printf("Number of Cache Misses: %d\n", cacheMisses);
-		printf("Cache Hit ratio: %3.2f\n%", cacheHitRatio);
-		printf("Cache Miss ratio: %3.2f\n%", cacheMissRatio);
+		printf("Cache Miss ratio: %9.7f\n", cacheMissRatio);
 	}
 }
 
@@ -184,8 +178,7 @@ void SerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 void BestSerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 {
 	int i,j,k;
-	double cacheHits = 0.0;
-	int cacheMisses = 0;
+	int cacheHits, cacheMisses;
 	int total = 0; //cacheHits + cacheMisses;
 	double cacheHitRatio = 0; //(cacheHits / total) 
 	int requests = A->rows * B->cols; //Number of data values requested
@@ -200,17 +193,12 @@ void BestSerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 			}
 		}
 	}
-	cacheHits = (A->rows * A->rows - (1 * A->rows));
-	cacheMisses = ((A->rows * A->rows) / B->cols) + (A->rows * A->rows * A->rows) + ((A->rows * A->rows) / B->cols);
-	total = cacheHits + cacheMisses;
-	cacheHitRatio = (cacheHits / total) * 100;
-	cacheMissRatio = (cacheMisses / requests) * 100;
+	cacheMisses = ((A->rows * A->rows * A->rows) / B->cols) + ((A->rows * A->rows) / B->cols) + ((A->rows * A->rows) / B->cols);
+	cacheMissRatio = cacheMisses / requests;
 	if(myRank == 0)
 	{
-		printf("Number of Cache Hits: %3.2f\n", cacheHits);
 		printf("Number of Cache Misses: %d\n", cacheMisses);
-		printf("Cache Hit ratio: %3.2f%\n", cacheHitRatio);
-		printf("Cache Miss ratio: %3.2f%\n", cacheMissRatio);
+		printf("Cache Miss ratio: %9.7f\n", cacheMissRatio);
 	}
 }
 

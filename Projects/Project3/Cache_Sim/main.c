@@ -30,31 +30,31 @@ int main(int argc, char **argv)
 */	//int blockSize = A.rows / worldSize; //Makes even blocks based on number of nodes
 	//int n = A.rows;
 	double startTime, stopTime;
-/*	startTime = MPI_Wtime();
+	startTime = MPI_Wtime();
 
-	SerialMult(&A,&B,&C);
+	SerialMult(&A,&B,&C, myRank);
 	stopTime = MPI_Wtime();
 	if(myRank == 0)
 	{
 		printf("Serial Mult Matrix: \n");
-	//	printMatrix(&C);
+		//printMatrix(&C);
 		printf("Time taken: %9.7f\n", stopTime - startTime);
 	}
 
 	AllocateMatrix(&C);
 
 	startTime = MPI_Wtime();
-	BestSerialMult(&A,&B,&C);
+	BestSerialMult(&A,&B,&C,myRank);
 	stopTime = MPI_Wtime();
 	
 	//MatrixMult(&A,&B,&C);
 	if(myRank == 0)
 	{
 		printf("Serialized Best Blocked Matrix: \n");
-	//	printMatrix(&C);
+		//printMatrix(&C);
 		printf("Time taken: %9.7f\n", stopTime - startTime);
 	}
-*/
+	
 	matrix G;
 	matrix H;
 	matrix I;
@@ -71,10 +71,11 @@ int main(int argc, char **argv)
 		//printMatrix(&H);
 		AllocateMatrix(&I);
 	}
-
-	startTime = MPI_Wtime();
-	classicMultMatrix(&G,&H,&I,&world,worldSize,myRank);
-	stopTime = MPI_Wtime();
+	
+		startTime = MPI_Wtime();
+		classicMultMatrix(&G,&H,&I,&world,worldSize,myRank);
+		stopTime = MPI_Wtime();
+		
 
 	if(myRank == 0)
 	{
@@ -82,11 +83,11 @@ int main(int argc, char **argv)
 		//printMatrix(&I);
 		printf("Time taken: %9.7f\n", stopTime - startTime);
 	}
-
-	startTime = MPI_Wtime();
-	FasterMultMatrix(&G,&H,&I,&world,worldSize,myRank);
-	stopTime = MPI_Wtime();
-
+	
+		startTime = MPI_Wtime();
+		FasterMultMatrix(&G,&H,&I,&world,worldSize,myRank);
+		stopTime = MPI_Wtime();
+	
 	if(myRank == 0)
 	{
 		printf("Faster Parallel Mult Matrix:\n");
