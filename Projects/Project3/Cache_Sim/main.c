@@ -36,9 +36,8 @@ int main(int argc, char **argv)
 	stopTime = MPI_Wtime();
 	if(myRank == 0)
 	{
-		printf("Serial Mult Matrix: \n");
 		//printMatrix(&C);
-		printf("Time taken: %9.7f\n", stopTime - startTime);
+		printf("Time taken: %9.7f seconds\n", stopTime - startTime);
 	}
 
 	AllocateMatrix(&C);
@@ -50,9 +49,9 @@ int main(int argc, char **argv)
 	//MatrixMult(&A,&B,&C);
 	if(myRank == 0)
 	{
-		printf("Serialized Best Blocked Matrix: \n");
 		//printMatrix(&C);
-		printf("Time taken: %9.7f\n", stopTime - startTime);
+		printf("Time taken: %9.7f seconds\n", stopTime - startTime);
+		puts("-------------------------------------------");
 	}
 	
 	matrix G;
@@ -81,7 +80,8 @@ int main(int argc, char **argv)
 	{
 		printf("Classic Parallel Mult Matrix:\n");
 		//printMatrix(&I);
-		printf("Time taken: %9.7f\n", stopTime - startTime);
+		printf("Time taken: %9.7f seconds\n", stopTime - startTime);
+		puts("-------------------------------------------");
 	}
 	
 		startTime = MPI_Wtime();
@@ -92,7 +92,8 @@ int main(int argc, char **argv)
 	{
 		printf("Faster Parallel Mult Matrix:\n");
 		//printMatrix(&I);
-		printf("Time taken: %9.7f\n", stopTime - startTime);
+		printf("Time taken: %9.7f seconds\n", stopTime - startTime);
+		puts("-------------------------------------------");
 	}
 
 	//printf("MPI_time measured: %1.6f seconds\n", stopTime-startTime);
