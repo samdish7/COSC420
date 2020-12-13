@@ -148,7 +148,7 @@ void MPISubMatrix(matrix *A, matrix *B, matrix *C, MPI_Comm* world, int worldSiz
 void SerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 {
 	int i,j,k;
-	double cacheHits = 0.0;
+	double cacheHits = 0;
 	int cacheMisses = 0;
 	int total = 0; //cacheHits + cacheMisses;
 	double cacheHitRatio = 0; //(cacheHits / total) 
@@ -164,17 +164,19 @@ void SerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 			}
 		}
 	}
-	cacheHits = (1 / A->rows) * 100;
+	cacheHits = A->rows / requests; //Cache hits once per row
 	cacheMisses = ((A->rows * A->rows) / B->cols) + (A->rows * A->rows * A->rows) + ((A->rows * A->rows) / B->cols);
 	total = cacheHits + cacheMisses;
-	cacheHitRatio = cacheHits / total;
+	cacheHitRatio = (cacheHits / total) * 100;
 	cacheMissRatio = (cacheMisses / requests) * 100;
 	if(myRank == 0)
 	{
+		puts("-------------------------------------------");
+		printf("Serial IJK ordering of Matrix Mult Info:\n");
 		printf("Number of Cache Hits: %3.2f\n", cacheHits);
 		printf("Number of Cache Misses: %d\n", cacheMisses);
-		printf("Cache Hit ratio: %3.2f\n%", cacheHitRatio);
-		printf("Cache Miss ratio: %3.2f\n%", cacheMissRatio);
+		printf("Cache Hit ratio: %3.2f%\n", cacheHitRatio);
+		printf("Cache Miss ratio: %3.2f%\n", cacheMissRatio);
 	}
 }
 
@@ -200,13 +202,15 @@ void BestSerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 			}
 		}
 	}
-	cacheHits = (A->rows * A->rows - (1 * A->rows));
-	cacheMisses = ((A->rows * A->rows) / B->cols) + (A->rows * A->rows * A->rows) + ((A->rows * A->rows) / B->cols);
+	cacheHits = (A->rows * A->rows - (1 * A->rows)); //Cache hits everytime except once per row
+	cacheMisses = ((A->rows * A->rows) / B->cols) + ((A->rows * A->rows * A->rows) / B->cols) + ((A->rows * A->rows) / B->cols);
 	total = cacheHits + cacheMisses;
 	cacheHitRatio = (cacheHits / total) * 100;
 	cacheMissRatio = (cacheMisses / requests) * 100;
 	if(myRank == 0)
 	{
+		puts("-------------------------------------------");
+		printf("Serial IKJ ordering of Matrix Mult Info:\n");
 		printf("Number of Cache Hits: %3.2f\n", cacheHits);
 		printf("Number of Cache Misses: %d\n", cacheMisses);
 		printf("Cache Hit ratio: %3.2f%\n", cacheHitRatio);
