@@ -54,6 +54,20 @@ int main(int argc, char **argv)
 		puts("-------------------------------------------");
 	}
 	
+	AllocateMatrix(&C);
+
+	int blockSize = A.rows / 2;
+	startTime = MPI_Wtime();
+	BlockedSerialMatrixMult(&A,&B,&C,blockSize,myRank);
+	stopTime = MPI_Wtime();
+	
+	if(myRank == 0)
+	{
+		//printMatrix(&C);
+		printf("Time taken: %9.7f seconds\n", stopTime - startTime);
+		puts("-------------------------------------------");
+	}
+
 	matrix G;
 	matrix H;
 	matrix I;
