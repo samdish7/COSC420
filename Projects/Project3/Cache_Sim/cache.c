@@ -49,8 +49,88 @@
 // ================================
 // The quickest time for a proc to compute an equation
 // this is timed by OPERATIONS/SECOND
-#include<stdio.h>
+#include"cache.h"
 int main(int argc, char** argv){
+	// Intiate MPI
+	MPI_Init(&argc, &argv);
+	MPI_Comm world = MPI_COMM_WORLD;
+	int myRank, worldSize;
+	MPI_Comm_size(world, &worldSize);
+	MPI_Comm_rank(world, &myRank);
 
+	srand(time(NULL) + myRank);
+	matrix A, B, result;// Matrices
+	double start, end;// Timing
+	A.rows = A.cols = B.rows = B.cols = result.rows = result.cols = atoi(argv[1]);
+		
+		createMatrix(&A);
+		createMatrix(&B);
+		allocateMatrix(&result);
+	
+	/*if(myRank == 0){
+		puts("Matrix A");
+		printMatrix(&A);
+		puts("Matrix B");
+		printMatrix(&B);
+		puts("====================");
+	}*/
+	
+	start = MPI_Wtime();
+	SerialMult(&A, &B, &result);
+	end = MPI_Wtime();
+	
+	if(myRank == 0){
+		printf("Normal Serial Mult took %9.7f seconds\n", end - start);
+		//puts("Result Matrix 1");
+		//printMatrix(&result);
+		puts("====================");
+		allocateMatrix(&result);
+	}
+	
+	start = MPI_Wtime();
+	BestSerialMult(&A, &B, &result);
+	end = MPI_Wtime();
+	
+	if(myRank == 0){
+		printf("Best Serial Mult took %9.7f seconds\n", end - start);
+		//puts("Result Matrix 2");
+		//printMatrix(&result);
+		puts("====================");
+		allocateMatrix(&result);
+	}
+	
+	// new set of matrices
+	matrix C, D;
+	C.rows = C.cols = D.rows = D.cols = atoi(argv[1]);
+	if(myRank == 0){
+		createMatrix(&C);
+		createMatrix(&D);
+		/*
+ 		puts("Matrix C");
+		printMatrix(&C);
+		puts("Matrix D");
+		printMatrix(&D);
+		puts("====================");
+		*/
+	}
+
+	start = MPI_Wtime();
+	classicMultMatrix(&A, &B, &result, &world, worldSize, myRank);
+	end = MPI_Wtime();
+
+	if(myRank == 0){
+		printf("Classic Parallel Mult took %9.7f seconds\n", end - start);
+		//puts("Result Matrix 3");
+		//printMatrix(&result);
+		puts("====================");
+		allocateMatrix(&result);
+	}
+fflush(stdout);	
+if(myRank == 0){
+	free(A.data);
+	free(B.data);
+	free(result.data);
+}
+MPI_Finalize();
 return 0;
 }
