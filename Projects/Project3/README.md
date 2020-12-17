@@ -46,19 +46,19 @@ This also is true for the parallel versions.  The column accessed function is mu
 
 *ALG 2 Average Time:* 0.0017116s
 
-###1000 x 1000 matrices
+### 1000 x 1000 matrices
 
 *ALG 1 Average Time:* 1.6226671s
 
 *ALG 2 Average Time:* 0.7889149s
 
-###2000 x 2000 matrices
+### 2000 x 2000 matrices
 
 *ALG 1 Average Time:* 33.1050363s
 
 *ALG 2 Average Time:* 7.9215698s
 
-###5000 x 5000 matrices
+### 5000 x 5000 matrices
 
 *ALG 1 Average Time:* 1078.9809074s
 
@@ -66,29 +66,29 @@ This also is true for the parallel versions.  The column accessed function is mu
 
 As you can tell, ALG 2 becomes much more efficient as n grows.
 
-###Data; Each tested thoroughly
+### Data; Each tested thoroughly
 
-###Parallelized Multiplication on 5 nodes
+### Parallelized Multiplication on 5 nodes
 
-###100 x 100 matrixes
+### 100 x 100 matrixes
 
 *ALG 1 Average Time:* 0.0564578s
 
 *ALG 2 Average Time:* 0.0460773
 
-###1000 x 1000 matrixes
+### 1000 x 1000 matrixes
 
 *ALG 1 Average Time:* 7.6908176s
 
 *ALG 2 Average Time:* 6.6395664s
  
-###2000 x 2000 matrixes
+### 2000 x 2000 matrixes
 
 *ALG 1 Average Time:* 69.4638822s
 
 *ALG 2 Average Time:* 39.0878732s
  
-###5000 x 5000 matrixes
+### 5000 x 5000 matrixes
 
 *ALG 1 Average Time:* 1663.9186044s
 
