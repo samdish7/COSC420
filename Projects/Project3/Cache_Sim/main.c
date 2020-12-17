@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 	
 	AllocateMatrix(&C);
 
-	int blockSize = A.rows / 2;
+	int blockSize = A.rows / 4;
 	startTime = MPI_Wtime();
 	BlockedSerialMatrixMult(&A,&B,&C,blockSize,myRank);
 	stopTime = MPI_Wtime();
