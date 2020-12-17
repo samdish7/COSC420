@@ -99,32 +99,41 @@ int main(int argc, char** argv){
 		allocateMatrix(&result);
 	}
 	
-	// new set of matrices
-	matrix C, D;
-	C.rows = C.cols = D.rows = D.cols = atoi(argv[1]);
-	if(myRank == 0){
-		createMatrix(&C);
-		createMatrix(&D);
-		/*
- 		puts("Matrix C");
-		printMatrix(&C);
-		puts("Matrix D");
-		printMatrix(&D);
-		puts("====================");
-		*/
-	}
-
 	start = MPI_Wtime();
-	classicMultMatrix(&A, &B, &result, &world, worldSize, myRank);
+	result.data = classicMultMatrix(&A, &B, &world, worldSize, myRank);
 	end = MPI_Wtime();
 
 	if(myRank == 0){
 		printf("Classic Parallel Mult took %9.7f seconds\n", end - start);
-		//puts("Result Matrix 3");
-		//printMatrix(&result);
+		
+  		puts("Result Matrix 3");
+		printMatrix(&result);
+		
 		puts("====================");
 		allocateMatrix(&result);
 	}
+	/*BestSerialMult(&A, &B, &result);
+	if(myRank == 0){
+		puts("Result Matrix 2");
+		printMatrix(&result);
+		puts("====================");
+		allocateMatrix(&result);
+	}*/
+	start = MPI_Wtime();
+	FasterMultMatrix(&A, &B, &result, &world, worldSize, myRank);
+	end = MPI_Wtime();
+	
+	if(myRank == 0){
+		printf("Faster Parallel Mult took %9.7f seconds\n", end - start);
+		
+  		puts("Result Matrix 4");
+		printMatrix(&result);	
+		puts("====================");
+		allocateMatrix(&result);
+	}
+	
+	
+	
 fflush(stdout);	
 if(myRank == 0){
 	free(A.data);
