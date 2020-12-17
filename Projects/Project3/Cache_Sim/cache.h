@@ -27,7 +27,7 @@ void initMatrix(matrix *A, int rows, int cols)
 	{
 		for(j = 0; j < A->cols; j++)
 		{
-			ACCESS(A,i,j) = 1;
+			ACCESS(A,i,j) = 0;
 		}
 	}
 }
@@ -196,35 +196,25 @@ double InnerProd(matrix *A, matrix *B, MPI_Comm *world, int worldSize, int myRan
 		return -1;
 	}
 
-	int length = A->rows * A->cols;
-	int VectorArray[worldSize];
-	int displacement[worldSize];
+	int length = A->cols;
+	int* VectorArray = malloc(worldSize * sizeof(int));
+	int* displacement = malloc(worldSize * sizeof(int));
 	int j;
 
 	for(j = 0; j < worldSize; j++)
 	{
 		VectorArray[j] = length / worldSize;
+		displacement[j] = j * (length / worldSize);
+	}
+	if(length % worldSize > 0){
+		int extra = length % worldSize;
+		VectorArray[worldSize - 1] += extra;
 	}
 
-	for(j = 0; j < (length % worldSize); j++)
-	{
-		VectorArray[j] += 1;
-	}
 
-	int nextLength = 0;
-	for(j = 0; j < worldSize; j++)
-	{
-		if(j == 0)
-		{
-			displacement[j] = 0;
-			nextLength = VectorArray[j];
-			continue;
-		}
-		displacement[j] = displacement[j - 1] + nextLength;
-		nextLength = VectorArray[j];
-	}
 
 	int matrixLen = VectorArray[myRank]; // Nodes divide array size
+	//printf("Node %d ~> Matrix Len ~> %d\n", myRank, matrixLen);
 	double result = 0; //Final prod
 	
 	double *localMatA = (double*)malloc(matrixLen*sizeof(double));
@@ -259,6 +249,8 @@ double InnerProd(matrix *A, matrix *B, MPI_Comm *world, int worldSize, int myRan
 	
 	free(localMatA);
 	free(localMatB);
+	free(displacement);
+	free(VectorArray);
 	if(myRank == 0)
 	{
 		return result;
@@ -267,52 +259,39 @@ double InnerProd(matrix *A, matrix *B, MPI_Comm *world, int worldSize, int myRan
 }
 
 //Altered matrix Mult
-void classicMultMatrix(matrix *A, matrix *B, matrix *C, MPI_Comm *world, int worldSize, int myRank)
-{
+double* classicMultMatrix(matrix *A, matrix *B, MPI_Comm *world, int worldSize, int myRank) {
+	int len;
 	if(A->cols != B->rows)
 	{
 		puts("Wrong dimensions, need square matrices\n");
 	}
 
+	len = A->rows * B->rows;
+	double* result = malloc(len*sizeof(double));
 	matrix Atemp;
 	matrix Btemp;
 	initMatrix(&Atemp, 1, A->cols);
 	initMatrix(&Btemp, B->cols, 1);
 
 	int i,j,k;
-	for(i = 0; i < A->rows; i++)
-	{
-		for(j = 0; j < B->cols; j++)
-		{
-			if(myRank == 0)
-			{
-				//Copies temp A data over
-				for(k = 0; k < A->cols; k++)
-				{
-					Atemp.data[k] = ACCESS(A,i,k);
-				}
+	for(i = 0; i < A->rows; i++){
+		for(j = 0; j < B->cols; j++){
+			//Copies temp A data over
+			for(k = 0; k < A->cols; k++){
+				Atemp.data[k] = ACCESS(A,i,k);
+				Btemp.data[k] = ACCESS(B,k,j);
 			}
 
-			if(myRank == 0)
-			{
-				//Copies temp A data over
-				for(k = 0; k < A->cols; k++)
-				{
-					Btemp.data[k] = ACCESS(B,k,j);
-				}
-			}
 
 			double InnerProduct = InnerProd(&Atemp, &Btemp, world, worldSize, myRank);
-
-			if(myRank == 0)
-			{
-				ACCESS(C,i,j) = InnerProduct;
-			}
+			result[INDEX(B,i,j)] = InnerProduct;
+			
 		}
 	}
 
 	free(Atemp.data);
 	free(Btemp.data);
+	return result;
 }
 
 void FasterMultMatrix(matrix *A, matrix *B, matrix *C, MPI_Comm *world, int worldSize, int myRank)
@@ -328,34 +307,18 @@ void FasterMultMatrix(matrix *A, matrix *B, matrix *C, MPI_Comm *world, int worl
 	initMatrix(&Btemp, B->cols, 1);
 
 	int i,j,k;
-	for(i = 0; i < A->rows; i++)
-	{
-		for(k = 0; k < B->cols; k++)
-		{
-			if(myRank == 0)
-			{
-				//Copies temp A data over
-				for(j = 0; j < A->cols; j++)
-				{
-					Atemp.data[k] = ACCESS(A,i,k);
-				}
+	for(i = 0; i < A->rows; i++){
+		for(k = 0; k < B->cols; k++){
+			//Copies temp A data over
+			for(j = 0; j < A->cols; j++){
+				Atemp.data[k] = ACCESS(A,i,k);
+				Btemp.data[k] = ACCESS(B,k,j);
 			}
 
-			if(myRank == 0)
-			{
-				//Copies temp A data over
-				for(j = 0; j < A->cols; j++)
-				{
-					Btemp.data[k] = ACCESS(B,k,j);
-				}
-			}
 
 			double InnerProduct = InnerProd(&Atemp, &Btemp, world, worldSize, myRank);
 
-			if(myRank == 0)
-			{
 				ACCESS(C,i,j) = InnerProduct;
-			}
 		}
 	}
 

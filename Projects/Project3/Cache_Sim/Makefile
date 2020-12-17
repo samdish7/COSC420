@@ -5,4 +5,4 @@ all: cache
 cache: cache.c
 	mpicc -o cache cache.c -lm
 clean:
-	rm -f main
+	rm -f main cache
