@@ -152,7 +152,6 @@ void SerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 	double cacheMisses = 0;
 	double total = 0; //cacheHits + cacheMisses;
 	double cacheHitRatio = 0; //(cacheHits / total) 
-	double requests = A->rows * B->cols; //Number of data values requested
 	double cacheMissRatio = 0; // cacheMisses / requests 
 	for(i=0; i < A->rows; i++)
 	{
@@ -165,7 +164,7 @@ void SerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 		}
 	}
 	cacheHits = A->rows * A->rows; //Cache hits once per row
-	cacheMisses = (9/8) * (A->rows * A->rows * A->rows);	
+	cacheMisses = (9/8 * (A->rows * A->rows * A->rows));	
 	total = cacheHits + cacheMisses;
 	cacheHitRatio = cacheHits / total;
 	cacheMissRatio = (1 - cacheHitRatio);
@@ -177,8 +176,8 @@ void SerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 		printf("Serial IJK ordering of Matrix Mult Info:\n");
 		printf("Number of Cache Hits: %3.0f\n", cacheHits);
 		printf("Number of Cache Misses: %3.0f\n", cacheMisses);
-		printf("Cache Hit ratio: %3.2f%\n", cacheHitRatio);
-		printf("Cache Miss ratio: %3.2f%\n", cacheMissRatio);
+		printf("Cache Hit ratio: %3.2f percent\n", cacheHitRatio);
+		printf("Cache Miss ratio: %3.2f percent\n", cacheMissRatio);
 	}
 //	Free all long doubles and ints
 }
@@ -190,10 +189,9 @@ void BestSerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 {
 	int i,j,k;
 	double cacheHits = 0;
-	double cacheMisses = 0;
-	long total = 0; //cacheHits + cacheMisses;
+	int cacheMisses = 0;
+	int total = 0; //cacheHits + cacheMisses;
 	double cacheHitRatio = 0; //(cacheHits / total) 
-	long requests = A->rows * B->cols; //Number of data values requested
 	double cacheMissRatio = 0; // cacheMisses / requests 
 	for(i = 0; i < A->rows; i++)
 	{
@@ -218,9 +216,9 @@ void BestSerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 		puts("-------------------------------------------");
 		printf("Serial IKJ ordering of Matrix Mult Info:\n");
 		printf("Number of Cache Hits: %3.0f\n", cacheHits);
-		printf("Number of Cache Misses: %3.0f\n", cacheMisses);
-		printf("Cache Hit ratio: %3.2f%\n", cacheHitRatio);
-		printf("Cache Miss ratio: %3.2f%\n", cacheMissRatio);
+		printf("Number of Cache Misses: %d\n", cacheMisses);
+		printf("Cache Hit ratio: %3.2f percent\n", cacheHitRatio);
+		printf("Cache Miss ratio: %3.2f percent\n", cacheMissRatio);
 	}
 }
 
@@ -228,11 +226,10 @@ void BestSerialMult(matrix *A, matrix *B, matrix *C, int myRank)
 void BlockedSerialMatrixMult(matrix *A, matrix *B, matrix *C, int blockSize, int myRank)
 {
 	int i,j,k, i1, j1, k1;
-	double cacheHits = 0.0;
-	long cacheMisses = 0;
-	long total = 0; //cacheHits + cacheMisses;
+	double cacheHits = 0;
+	int cacheMisses = 0;
+	int total = 0; //cacheHits + cacheMisses;
 	double cacheHitRatio = 0; //(cacheHits / total) 
-	long requests = A->rows * B->cols; //Number of data values requested
 	double cacheMissRatio = 0; // cacheMisses / requests 
 	for(i = 0; i < A->rows; i += blockSize)
 	{
@@ -265,8 +262,8 @@ void BlockedSerialMatrixMult(matrix *A, matrix *B, matrix *C, int blockSize, int
 		printf("Blocked ordering of Matrix Mult Info:\n");
 		printf("Number of Cache Hits: %3.0f\n", cacheHits);
 		printf("Number of Cache Misses: %d\n", cacheMisses);
-		printf("Cache Hit ratio: %3.2f%\n", cacheHitRatio);
-		printf("Cache Miss ratio: %3.2f%\n", cacheMissRatio);
+		printf("Cache Hit ratio: %3.2f percent\n", cacheHitRatio);
+		printf("Cache Miss ratio: %3.2f percent\n", cacheMissRatio);
 	}
 }
 
