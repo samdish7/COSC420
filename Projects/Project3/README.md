@@ -36,7 +36,7 @@ In ALG 1, b[k,j] is accesed by columns, so only one element is used in the cache
 
 This also is true for the parallel versions.  The column accessed function is much faster than the row access function. 
 
-### Data; Each tested thoroughly (December 4th & 11th)
+# Data
 
 #### Serialized Multiplication
 
@@ -64,9 +64,7 @@ This also is true for the parallel versions.  The column accessed function is mu
 
 *ALG 2 Average Time:* 129.8003666s
 
-As you can tell, ALG 2 becomes much more efficient as n grows.
-
-### Data; Each tested thoroughly
+**As you can tell, ALG 2 becomes much more efficient as n grows.**
 
 ### Parallelized Multiplication on 5 nodes
 
