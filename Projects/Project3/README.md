@@ -38,7 +38,7 @@ This also is true for the parallel versions.  The column accessed function is mu
 
 # Data
 
-#### Serialized Multiplication
+## Serialized Multiplication
 
 ### 100 x 100 matrices
 
@@ -66,7 +66,7 @@ This also is true for the parallel versions.  The column accessed function is mu
 
 **As you can tell, ALG 2 becomes much more efficient as n grows.**
 
-### Parallelized Multiplication on 5 nodes
+## Parallelized Multiplication on 5 nodes
 
 ### 100 x 100 matrixes
 
